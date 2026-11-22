@@ -1,6 +1,31 @@
 # Protocolo de Pruebas — AgroSafe (Avance 3)
 
-> Las tablas de resultados están vacías: completarlas con las mediciones reales del equipo. No inventar datos.
+> Las tablas de cada prueba son para las mediciones con el equipo real. Antes se probó el programa en simulación (abajo): sensores simulados e imágenes sintéticas, sin la Raspberry ni la cámara.
+
+## Resultados en simulación (22-11-2026)
+
+Se ejecutó el programa real `agrosafe.py` con sensores simulados y la función real de reconocimiento `detectar_estrella()` sobre imágenes generadas (estrella = figura objetivo; círculo o cuadrado = otro objeto). Script y detalle en `testing/simulacion/`; datos en `testing/datos/20261122_simulacion.csv`; captura en `testing/evidencias/dashboard_simulacion.png`.
+
+**Prueba 2 en simulación: lógica de activación / descarte**
+
+| Escenario | Intentos | Activado | Descartado | Tasa de acierto |
+|---|---|---|---|---|
+| Figura a ~30 cm | 10 | 10 | 0 | 100 % |
+| Figura a ~80 cm | 10 | 0 | 10 | 100 % |
+| Otro objeto a ~30 cm | 10 | 0 | 10 | 100 % |
+
+Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verificación de distancia); con otro objeto descarta en la primera captura.
+
+**Prueba 3 en simulación: latencia del programa**
+- Movimiento → encendido del relé: 1,71 s en promedio (mín. 1,71 s, máx. 1,73 s; 10 activaciones). Corresponde a 3 lecturas de distancia, 2 capturas con 0,5 s entre ellas y la verificación final. No incluye el tiempo real de descarga de la foto desde la ESP32-CAM.
+- Dashboard: se actualiza cada 1 s, por lo que un evento aparece en ≤ 1 s.
+
+**Prueba 4 en simulación: persistencia**
+- Se generaron 100 eventos y el CSV quedó con 100 filas (100 % registrados).
+- Al reiniciar el programa se recargaron los 60 eventos de detección, activación y descarte, y los indicadores del día quedaron iguales: 30 movimientos, 10 activaciones, 20 descartes, 33,3 % confirmadas.
+- Con 10 activaciones en la última hora apareció la alerta de alta actividad (umbral: 5).
+
+**Limitaciones:** no mide la precisión real del HC-SR04 (Prueba 1), el tiempo de la cámara por WiFi ni la autonomía (Prueba 5), y las imágenes sintéticas son más limpias que una foto real. Esas pruebas se deben hacer con el equipo armado.
 
 ---
 
