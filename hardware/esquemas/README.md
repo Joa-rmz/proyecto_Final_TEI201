@@ -1,9 +1,9 @@
 # Esquemas de Circuito
 
-![Esquema de conexiones](esquematico_v3.png)
+![Esquema de conexiones](IMG_0765.jpeg)
 
 ## Archivos
-- `esquematico_v3.png` — esquemático eléctrico (imagen)
+- `IMG_0765.jpeg` — esquemático eléctrico (imagen)
 
 ## Conexiones (referencia para dibujar el esquema)
 
