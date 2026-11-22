@@ -1,9 +1,9 @@
 # ESP32-CAM — Cámara de confirmación
 
-La ESP32-CAM (AI-Thinker, sensor OV2640) se conecta a la misma red WiFi que la Raspberry Pi 4 Model B. Cuando el sistema activa el rociador, `agrosafe.py` le pide una foto por HTTP (`/capture`) y la muestra en el dashboard. Así el agricultor confirma si fue un conejo u otro animal.
+La ESP32-CAM (AI-Thinker, sensor OV2640) se conecta a la misma red WiFi que la Raspberry Pi 4 Model B. Cuando el PIR y el ultrasónico detectan un objetivo, `agrosafe.py` toma 2 capturas y verifica en ambas la figura objetivo antes de activar la bomba.
 
 ```
-Raspberry Pi 4 Model B  --(WiFi, HTTP GET /capture)-->  ESP32-CAM  --> foto JPG --> dashboard
+Raspberry Pi 4 Model B  --(WiFi, captura)-->  ESP32-CAM  --> imagen --> reconocimiento --> relé de la bomba
 ```
 
 ## Firmware
@@ -38,11 +38,7 @@ Se usa el ejemplo **CameraWebServer** del núcleo ESP32 para Arduino (Espressif)
 
 ## Conectar con la Raspberry
 
-Al ejecutar el programa principal, indicar la IP de la cámara:
-
-```bash
-ESP32_CAM_URL=http://<IP-ESP32-CAM>/capture python3 agrosafe.py
-```
+La Raspberry obtiene las capturas de la ESP32-CAM mediante el módulo `software/src/agrosafe_integracion_prueba_v2.py` (función `capturar()`), que se usa en cada evaluación de `agrosafe.py`.
 
 > Recomendación: reservar una IP fija para la ESP32-CAM en el router, así no cambia entre sesiones.
 
