@@ -1,8 +1,7 @@
 # Evidencias de Testing
 
-Subir aquí:
-- `dashboard_tiempo_real.png` — dashboard con indicadores y gráfico
-- `dashboard_alerta.png` — dashboard mostrando la alerta de alta actividad
-- `csv_datos.png` — captura del archivo de datos
-- `prueba_distancia.jpg` — montaje de la Prueba 1
-- `video_latencia.mp4` — video de la Prueba 3
+| Archivo | Contenido |
+|---|---|
+| `dashboard_simulacion.png` | Dashboard después de la simulación: 30 movimientos, 10 activaciones, 20 descartes, gráfico por hora y alerta de alta actividad |
+
+<img src="dashboard_simulacion.png" width="420" alt="Dashboard después de la simulación">
