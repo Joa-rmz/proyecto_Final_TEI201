@@ -22,6 +22,7 @@ Agrosafe_Ensamble_Completo
 ├── Bateria_20000mAh
 ├── Sensor_PIR_HC-SR501
 ├── Sensor_Ultrasonico_HC-SR04
+├── ESP32-CAM
 ├── Bomba_y_Rele
 ├── Servomotor
 └── Tornilleria_M3
