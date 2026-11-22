@@ -46,7 +46,7 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 - **Tapa removible** de la base para acceder a la Raspberry Pi y la protoboard sin romper nada.
 - Conexiones con **cables jumper desmontables** (sin soldadura estructural ni pegamento).
 - Sensores en la torreta, reemplazables de forma independiente.
-- `[COMPLETAR: tipo de fijación — tornillos M3 / clips — y tiempo para abrir el equipo]`
+- Fijación: la tapa se une a la base con 4 tornillos M3 y la tapa de la torreta cierra a presión, por lo que el equipo se abre con un destornillador para reparaciones.
 
 ## Precauciones
 - No conectar ECHO directo a un GPIO (5 V dañan la Raspberry).
