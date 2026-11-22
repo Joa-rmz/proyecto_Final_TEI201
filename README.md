@@ -4,6 +4,21 @@ Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta c
 
 **TEI201 — Taller de Diseño en Ingeniería · Universidad Adolfo Ibáñez · Grupo 6**
 
+> 📘 **Este repositorio es el informe del proyecto.** No hay un informe escrito aparte: cada sección del Avance 3 está documentada en su carpeta.
+
+| Sección del informe | Dónde está |
+|---|---|
+| Problema y solución | Este README (abajo) |
+| Software: captura, almacenamiento, dashboard e información | [`software/`](software/) · código en [`software/src/agrosafe.py`](software/src/agrosafe.py) |
+| ESP32-CAM | [`software/esp32cam/`](software/esp32cam/) |
+| Hardware: componentes, conexiones, reparación | [`hardware/`](hardware/) |
+| BOM y costos | [`hardware/bom/`](hardware/bom/) |
+| Diseño 3D: gemelo, planos, renders | [`diseno_3d/`](diseno_3d/) |
+| Testing y validación contra el problema | [`testing/`](testing/) · [`protocolo_pruebas.md`](testing/reportes/protocolo_pruebas.md) |
+| Evolución del prototipo (v1 → v3) | [`iteraciones/`](iteraciones/) |
+| Declaración de fuentes e IA | [`FUENTES.md`](FUENTES.md) |
+| Presentación | [`documentacion/`](documentacion/) |
+
 ---
 
 ## 👥 Integrantes
@@ -27,12 +42,12 @@ Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta c
 ## 💡 Solución
 
 ```
-PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s → Evento guardado en CSV → Dashboard + alertas
+PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto ESP32-CAM → Evento guardado en CSV → Dashboard + alertas
 ```
 
 | Capa | Implementación |
 |---|---|
-| Captura | Sensor PIR HC-SR501 + sensor ultrasónico HC-SR04 |
+| Captura | Sensor PIR HC-SR501 + sensor ultrasónico HC-SR04 + ESP32-CAM (foto del animal por WiFi) |
 | Procesamiento | Raspberry Pi 4 Model B (Python) |
 | Actuador | LED indicador (representa relé + mini bomba de agua) |
 | Almacenamiento | CSV estructurado persistente (`software/data/eventos.csv`) |
@@ -50,12 +65,13 @@ PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s → Even
 ├── FUENTES.md         # Declaración de librerías, código externo e IA (obligatorio)
 ├── software/          # (= firmware/) Código Python, dashboard, datos
 │   ├── src/agrosafe.py
+│   ├── esp32cam/      # Instrucciones del firmware de la ESP32-CAM
 │   ├── data/          # eventos.csv se genera al ejecutar
 │   └── requirements.txt
 ├── hardware/          # Esquemático, BOM, fotos del prototipo
 ├── diseno_3d/         # Fusion 360 / STEP / STL, planos, renders
 ├── testing/           # Protocolo de pruebas, datos y evidencias
-├── documentacion/     # (= docs/) Reporte final y presentaciones
+├── documentacion/     # (= docs/) Presentaciones
 └── iteraciones/       # Historial v1 → v2 → v3
 ```
 
@@ -68,6 +84,7 @@ PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s → Even
 | Raspberry Pi 4 Model B | 1 | Procesamiento, WiFi y dashboard |
 | Sensor PIR HC-SR501 | 1 | Detección de movimiento |
 | Sensor ultrasónico HC-SR04 | 1 | Confirmación de distancia (< 150 cm) |
+| ESP32-CAM (AI-Thinker, OV2640) + programador FTDI | 1 | Foto del animal al activarse; confirma si es un conejo |
 | LED + resistencia 220 Ω | 1 | Indicador del rociador |
 | Resistencias para divisor de voltaje | 2 | ECHO 5 V → 3,3 V |
 | Protoboard + cables jumper | 1 | Conexiones |
@@ -89,23 +106,33 @@ Detalle con costos en [`hardware/bom/`](hardware/bom/).
 | HC-SR04 ECHO (**con divisor de voltaje**) | GPIO 24 | 18 |
 | 5 V / GND | — | 2 / 6 |
 
-### 2. Instalar dependencias en la Raspberry Pi
+### 2. Preparar la ESP32-CAM
+1. En Arduino IDE, instalar el núcleo ESP32 y abrir Archivo → Ejemplos → ESP32 → Camera → `CameraWebServer`.
+2. Activar `CAMERA_MODEL_AI_THINKER` y escribir el WiFi en `ssid` / `password`.
+3. Cargar con el programador FTDI (GPIO 0 a GND al cargar; quitarlo y presionar RESET al terminar).
+4. Abrir el Monitor Serie a 115200 baudios y anotar la IP que aparece.
+5. Probar `http://<IP-ESP32-CAM>/capture` en el navegador: debe mostrar una foto.
+
+Detalle en [`software/esp32cam/`](software/esp32cam/).
+
+### 3. Instalar dependencias en la Raspberry Pi
 ```bash
 sudo apt update
 sudo apt install python3-flask python3-rpi.gpio
 ```
 
-### 3. Clonar y ejecutar
+### 4. Clonar y ejecutar
 ```bash
 git clone https://github.com/Joa-rmz/proyecto_Final_TEI201.git
 cd proyecto_Final_TEI201/software/src
-python3 agrosafe.py
+ESP32_CAM_URL=http://<IP-ESP32-CAM>/capture python3 agrosafe.py
 ```
 
-### 4. Abrir el dashboard
+### 5. Abrir el dashboard
 Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`** (IP con `hostname -I`).
 - `/datos.csv` → descarga del histórico
 - `/api/estadisticas` → indicadores en JSON
+- La última foto de la ESP32-CAM aparece en el dashboard tras cada activación
 
 ---
 
@@ -145,7 +172,7 @@ Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`*
 
 ### GitHub / Documentación
 - [x] README completo y FUENTES.md en la raíz
-- [ ] Reporte final y presentación Avance 3 en `documentacion/`
+- [ ] Presentación Avance 3 en `documentacion/presentacion/`
 - [ ] URL del repositorio en los slides
 
 ---
