@@ -9,7 +9,7 @@
 | Sección | Funciones | Qué hace |
 |---|---|---|
 | Configuración | — | Pines (numeración BOARD), umbrales y rutas de archivos |
-| Cámara | `tomar_foto()` | Foto opcional al activarse (si no hay cámara, el sistema sigue funcionando) |
+| Cámara | `foto_esp32cam()`, `tomar_foto()` | Pide una foto a la ESP32-CAM por WiFi al activarse (respaldo: cámara CSI; sin cámara el sistema sigue funcionando) |
 | Sensores | `medir_distancia_cm()` | Mide distancia con el HC-SR04 (devuelve -1 si no hay eco) |
 | Registro | `iniciar_csv()`, `registrar()` | Guarda cada evento en memoria y en `software/data/eventos.csv` |
 | Información | `calcular_estadisticas()` | Convierte eventos en indicadores (activaciones, hora peak, alerta) |
@@ -25,11 +25,12 @@
 | `TIEMPO_REPOSO_S` | 8 | Evita activaciones en cadena sobre el mismo animal |
 | `INTERVALO_BEACON_S` | 5 | Registro de "reposo" que demuestra captura continua |
 | Lectura del PIR | cada 0,1 s | Un conejo cruza 1,5 m en ~1 s; 10 lecturas/s aseguran no perder el evento |
+| `ESP32_CAM_URL` | `http://192.168.1.50/capture` | Dirección de la ESP32-CAM; cambiar por la IP que muestra su Monitor Serie |
 | `UMBRAL_ALERTA_HORA` | 5 | ≥ 5 activaciones en 1 h indica presión alta de conejos → el agricultor debe revisar el predio |
 
 ## Ejecución
 
 ```bash
 cd software/src
-python3 agrosafe.py
+ESP32_CAM_URL=http://<IP-ESP32-CAM>/capture python3 agrosafe.py
 ```

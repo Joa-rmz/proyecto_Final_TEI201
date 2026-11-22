@@ -2,7 +2,8 @@
 AgroSafe - Protección inteligente de cultivos (TEI201 - Grupo 6)
 
 Programa principal que corre en la Raspberry Pi 4 Model B:
-  1. CAPTURA   : PIR HC-SR501 detecta movimiento; HC-SR04 confirma distancia.
+  1. CAPTURA   : PIR HC-SR501 detecta movimiento; HC-SR04 confirma distancia;
+                 la ESP32-CAM toma una foto del animal por WiFi.
   2. ACTÚA     : si el objetivo está a < 150 cm, activa el rociador (LED/relé) 5 s.
   3. ALMACENA  : cada evento se guarda en data/eventos.csv (persiste al reiniciar).
   4. VISUALIZA : dashboard Flask en http://<IP-de-la-Raspberry>:5000
@@ -15,6 +16,7 @@ import csv
 import os
 import time
 import threading
+import urllib.request
 from collections import Counter
 from datetime import datetime, timedelta
 
@@ -48,8 +50,13 @@ ARCHIVO_CSV = os.path.join(CARPETA_DATOS, "eventos.csv")
 COLUMNAS_CSV = ["fecha", "hora", "estado", "distancia_cm", "foto"]
 FOTO_PATH = "/tmp/agrosafe_ultima.jpg"
 
+# Cámara ESP32-CAM (en la misma red WiFi). Su IP aparece en el Monitor Serie al encenderla.
+# Se puede cambiar sin editar el código:  ESP32_CAM_URL=http://192.168.1.50/capture python3 agrosafe.py
+ESP32_CAM_URL = os.environ.get("ESP32_CAM_URL", "http://192.168.1.50/capture")
+
 # ---------------------------------------------------------------------------
-# Cámara (opcional: si no está conectada el sistema funciona igual)
+# Cámara: ESP32-CAM por WiFi (principal) o cámara CSI de la Raspberry (respaldo).
+# Si ninguna responde, el sistema sigue funcionando sin foto.
 # ---------------------------------------------------------------------------
 camara = None
 
@@ -66,8 +73,29 @@ except Exception as e:
     print(f"Sin cámara: el sistema funciona igual. Detalle: {e}")
 
 
+def foto_esp32cam():
+    """Pide una foto a la ESP32-CAM (endpoint /capture) y la guarda en FOTO_PATH."""
+    if not ESP32_CAM_URL:
+        return False
+
+    try:
+        with urllib.request.urlopen(ESP32_CAM_URL, timeout=3) as respuesta:
+            imagen = respuesta.read()
+
+        with open(FOTO_PATH, "wb") as f:
+            f.write(imagen)
+        return True
+
+    except Exception as e:
+        print("ESP32-CAM no responde:", e)
+        return False
+
+
 def tomar_foto():
-    """Toma una fotografía si la cámara está disponible."""
+    """Toma una fotografía: primero con la ESP32-CAM y, si falla, con la cámara CSI."""
+    if foto_esp32cam():
+        return True
+
     if camara is None:
         return False
 
@@ -335,7 +363,7 @@ def dashboard():
 
     foto_html = ""
 
-    if camara is not None:
+    if camara is not None or ESP32_CAM_URL:
         foto_html = (
             "<h2>Última foto</h2>"
             f"<img src='/foto?t={time.time()}' style='max-width:100%'>"
