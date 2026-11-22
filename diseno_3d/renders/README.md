@@ -1,11 +1,11 @@
 # Renders
 
-> Generar en Fusion 360 (espacio Render) con materiales aplicados.
+Generados desde el ensamble `AgroSafe_montaje_completo_con_componentes.step` con todos los componentes internos.
 
 | Archivo | Vista |
 |---|---|
-| `01_exterior.png` | Isométrica del encapsulado cerrado |
-| `02_explosionado.png` | Vista explosionada con componentes internos |
-| `03_interior.png` | Corte o tapa transparente mostrando la Raspberry y sensores |
+| `01_exterior.png` | Encapsulado cerrado: base, tapa y torreta con HC-SR04, PIR y ESP32-CAM |
+| `02_explosionado.png` | Vista explosionada con el orden de ensamble y los ejes de los tornillos base-tapa |
+| `03_interior.png` | Corte por X = 0: batería, pila, Raspberry Pi 4, relé, protoboard y sensores en su posición |
 
-**Materiales sugeridos:** PETG/PLA mate en la carcasa, PCB verde, sensores con color real. Resolución ≥ 1920 × 1080.
+Colores: piezas impresas en verde/beige (PETG), componentes comerciales con su color real aproximado.
