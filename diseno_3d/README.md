@@ -1,73 +1,36 @@
-# Diseño 3D - Documentación
+# Diseño 3D - AgroSafe
 
-## ⚠️ REQUISITO CRÍTICO
+Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 
-El modelo 3D debe incluir **TODOS** los componentes del prototipo:
-- ✅ Encapsulado exterior completo
-- ✅ Placa ESP32/Arduino (con dimensiones exactas)
-- ✅ Todos los sensores en posición de instalación
-- ✅ Todos los actuadores
-- ✅ Batería / fuente de alimentación
-- ✅ Cableado (routing aproximado)
-- ✅ Sistema de montaje (brackets, tornillos)
-- ✅ Orificios de ventilación (si aplica)
+| Pieza | Dimensiones | Función |
+|---|---|---|
+| Base fija | 132 × 132 × 203 mm | Aloja Raspberry Pi 3 B+ (85 × 56 mm), protoboard, batería y cableado. Tapa removible para mantenimiento. |
+| Torreta giratoria | 59 × 81 × 88 mm | Sensores PIR y HC-SR04 arriba (campo de visión despejado), brazo y boquilla. Gira con servomotor. |
 
-**NO ES ACEPTABLE:** Solo el encapsulado vacío sin componentes internos
+**Software:** Autodesk Fusion 360 · **Unidades:** mm · **Escala:** 1:1
+**Material:** PLA (prototipo) · PETG (uso exterior: resiste sol y humedad)
+**Detalles:** aberturas de ventilación y pasacables.
 
----
+## 📁 Carpetas
+- `fusion360/` — `Montaje completo .step` (ensamble) + `Pieza 1.stl` a `Pieza 6.stl` · **falta `.f3d`/`.f3z`**
+- `planos/` — planos técnicos en PDF
+- `renders/` — renders exterior y explosionado
 
-## Carpetas
+## Gemelo 3D — componentes que deben estar en el ensamble
 
-#### `fusion360/`
-Archivos nativos de Fusion 360 (.f3d)
+| Componente | Volumen de referencia (mm) | ¿Modelado? |
+|---|---|---|
+| Raspberry Pi 3 B+ | 85 × 56 × 17 | [ ] |
+| Protoboard | `[COMPLETAR]` | [ ] |
+| Batería 20.000 mAh | `[COMPLETAR]` | [ ] |
+| Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) | [ ] |
+| Sensor HC-SR04 | 45 × 20 × 15 | [ ] |
+| Mini bomba + relé | `[COMPLETAR]` | [ ] |
+| Servomotor | `[COMPLETAR]` | [ ] |
+| Tornillería | M3 | [ ] |
 
-#### `renders/`
-Imágenes renderizadas de alta calidad
-
-#### `planos/`
-Planos técnicos con cotas
-
----
-
-## Especificaciones
-
-**Software:** Autodesk Fusion 360  
-**Unidades:** Milímetros (mm)  
-**Escala:** 1:1 (dimensiones reales)
-
-**Dimensiones externas:** [X mm × Y mm × Z mm]  
-**Peso estimado:** [XXX gramos]  
-**Material:** [PLA, ABS, PETG, etc.]
-
----
-
-## Consideraciones de Diseño
-
-### Funcionales
-- [ ] Acceso a puertos USB/alimentación
-- [ ] Ventilación adecuada
-- [ ] Protección de componentes
-- [ ] Fácil acceso para mantenimiento
-- [ ] Resistencia a condiciones ambientales
-
-### Fabricación
-- [ ] Imprimible sin soportes excesivos
-- [ ] Tolerancias de ensamble (+0.2mm)
-- [ ] Grosor de pared mínimo 2mm
-- [ ] Sin ángulos imposibles (overhangs <45°)
-
----
-
-## Configuración de Impresión 3D (si fue utilizada)
-
-**Impresora:** [Modelo]  
-**Material:** [PLA/ABS/PETG]  
-**Calidad de capa:** 0.2mm  
-**Relleno:** 20-30%  
-**Soportes:** [Sí/No - dónde]  
-**Temperatura nozzle:** [°C]  
-**Temperatura cama:** [°C]  
-**Velocidad:** [mm/s]
-
-**Tiempo estimado de impresión:** [X horas]  
-**Peso de material:** [X gramos]
+## Checklist
+- [ ] `fusion360/AgroSafe_ensamble_v3.f3z` con carcasa + componentes internos
+- [x] `fusion360/Montaje completo .step` y piezas STL (6)
+- [ ] `planos/plano_conjunto_v3.pdf` (vistas ortogonales, cotas, tolerancias, escala)
+- [ ] `renders/01_exterior.png` y `renders/02_explosionado.png`
