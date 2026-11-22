@@ -1,6 +1,6 @@
 # Renders
 
-> ⚠️ Generar en Fusion 360 (espacio Render) con materiales aplicados.
+> Generar en Fusion 360 (espacio Render) con materiales aplicados.
 
 | Archivo | Vista |
 |---|---|
