@@ -1,6 +1,6 @@
 # Esquemas de Circuito
 
-![Esquema de conexiones](IMG_0765.jpeg)
+<img src="IMG_0765.jpeg" width="600" alt="Esquemático eléctrico">
 
 ## Archivos
 - `IMG_0765.jpeg` — esquemático eléctrico (imagen)
