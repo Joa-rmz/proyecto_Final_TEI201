@@ -1,14 +1,16 @@
 # Fotografías del Prototipo
 
-> La pauta exige **mínimo 3 ángulos** del prototipo ensamblado (v3). La foto del primer montaje (ESP32) se movió a `iteraciones/iteracion_1/`.
+## Prototipo final (v3)
 
 | Archivo | Contenido |
 |---|---|
-| `01_vista_general.jpg` | Prototipo completo cerrado |
-| `02_circuito_interno.jpg` | Tapa abierta, Raspberry y protoboard visibles |
-| `03_detalle_conexiones.jpg` | Divisor de voltaje y pines GPIO |
-| `04_torreta_sensores.jpg` | PIR y ultrasónico montados |
-| `05_contexto_uso.jpg` | Prototipo en el lugar de prueba |
+| `IMG_5745.jpeg` | Vista frontal: en la torreta, el ultrasónico HC-SR04 arriba, el PIR al centro y la cámara de la ESP32-CAM abajo; bajo ella sale la manguera de la boquilla. Tapa gris fijada con tornillos sobre la base naranja, con la rejilla de ventilación y la salida de cables |
+| `IMG_5746.jpeg` | Vista posterior: torreta y base cerradas |
+| `IMG_5747.jpeg` | Vista superior sin la tapa de la torreta: el HC-SR04 y el PIR montados por dentro |
+
+![Vista frontal](IMG_5745.jpeg)
+![Vista posterior](IMG_5746.jpeg)
+![Vista superior de la torreta](IMG_5747.jpeg)
 
 ## Proceso de cableado
 
