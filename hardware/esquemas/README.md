@@ -4,7 +4,6 @@
 
 ## Archivos
 - `esquematico_v3.png` — esquemático eléctrico (imagen)
-- `esquematico_v3.pdf` — mismo esquemático en PDF
 
 ## Conexiones (referencia para dibujar el esquema)
 
