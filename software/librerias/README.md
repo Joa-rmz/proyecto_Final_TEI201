@@ -1,47 +1,12 @@
 # Librerías
 
-## Librerías Estándar (Arduino IDE)
+No se usan librerías modificadas; todas se instalan desde los repositorios de Raspberry Pi OS.
 
-Instalar desde el Library Manager de Arduino IDE:
+| Librería | Versión mínima | Uso | Instalación |
+|---|---|---|---|
+| Flask | 2.2 | Dashboard web y descarga del CSV | `sudo apt install python3-flask` |
+| RPi.GPIO | 0.7 | Lectura del PIR/ultrasónico y control del LED/relé | `sudo apt install python3-rpi.gpio` |
+| picamera2 | — (opcional) | Foto al detectar | `sudo apt install python3-picamera2` |
+| csv, threading, datetime, collections | Estándar de Python | Almacenamiento, concurrencia y estadísticas | Incluidas en Python 3 |
 
-1. **[Nombre Librería 1]** - v[X.X.X]
-   - Propósito: [Descripción]
-   - Instalación: `Sketch > Include Library > Manage Libraries > Buscar "[nombre]"`
-
-2. **[Nombre Librería 2]** - v[X.X.X]
-   - Propósito: [Descripción]
-   - Instalación: [Instrucciones]
-
----
-
-## Librerías Personalizadas/Modificadas
-
-Si hay librerías modificadas o no disponibles en Arduino IDE, incluir en esta carpeta:
-
-### Estructura
-```
-librerias/
-├── MiLibreria/
-│   ├── MiLibreria.h
-│   ├── MiLibreria.cpp
-│   ├── keywords.txt
-│   └── README.md
-```
-
-### Instalación Manual
-```bash
-# Copiar carpeta a Arduino libraries
-cp -r MiLibreria ~/Documents/Arduino/libraries/
-```
-
----
-
-## Dependencias Completas
-
-Listar TODAS las librerías necesarias con versiones exactas:
-
-| Librería | Versión | Fuente | Obligatoria |
-|----------|---------|--------|-------------|
-| WiFi | Built-in | ESP32 Core | ✅ |
-| [Lib 1] | x.x.x | Arduino Library Manager | ✅ |
-| [Lib 2] | x.x.x | GitHub | ❌ |
+Ver también `../requirements.txt` y `/FUENTES.md`.
