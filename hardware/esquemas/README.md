@@ -1,17 +1,17 @@
 # Esquemas de Circuito
 
-> Subir aquí el esquemático completo (`.fzz` de Fritzing o equivalente) y su exportación `esquematico.pdf` / `.png`.
+![Esquema de conexiones](esquema_conexiones_v3.png)
 
-## Archivos esperados
-- `agrosafe_circuito.fzz` — fuente Fritzing
-- `esquematico.pdf` — exportación del esquema
+## Archivos
+- `esquema_conexiones_v3.png` — esquema de conexiones (imagen)
+- `esquema_conexiones_v3.pdf` — mismo esquema en PDF (A3)
 
 ## Conexiones (referencia para dibujar el esquema)
 
 | Desde | Hacia |
 |---|---|
-| RPi pin 2 (5 V) | Riel + protoboard → VCC PIR, VCC HC-SR04 |
-| RPi pin 6 (GND) | Riel − protoboard → GND PIR, GND HC-SR04, GND relé, divisor |
+| RPi pin 2 (5 V) | Riel + protoboard → VCC PIR, VCC HC-SR04, VCC relé, 5V ESP32-CAM |
+| RPi pin 6 (GND) | Riel − protoboard → GND PIR, GND HC-SR04, GND relé, GND ESP32-CAM, divisor |
 | RPi pin 11 (GPIO 17) | OUT PIR |
 | RPi pin 13 (GPIO 27) | IN del módulo relé (bomba + pila 9 V en contacto NA) |
 | RPi pin 16 (GPIO 23) | TRIG HC-SR04 |
