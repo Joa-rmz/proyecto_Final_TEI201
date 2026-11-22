@@ -25,7 +25,7 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 - Al reiniciar el programa se recargaron los 60 eventos de detección, activación y descarte, y los indicadores del día quedaron iguales: 30 movimientos, 10 activaciones, 20 descartes, 33,3 % confirmadas.
 - Con 10 activaciones en la última hora apareció la alerta de alta actividad (umbral: 5).
 
-**Limitaciones:** no mide la precisión real del HC-SR04 (Prueba 1), el tiempo de la cámara por WiFi ni la autonomía (Prueba 5), y las imágenes sintéticas son más limpias que una foto real. Esas pruebas se deben hacer con el equipo armado.
+**Alcance:** la simulación no mide la precisión física del HC-SR04 (Prueba 1), el tiempo de la cámara por WiFi ni la autonomía (Prueba 5), y las imágenes sintéticas son más limpias que una foto real. Las tablas siguientes sirven para registrar esas mediciones con el equipo armado.
 
 ---
 
@@ -134,4 +134,4 @@ En el Avance 1 se identificó que los agricultores del Valle del Choapa enfrenta
 | Saber cuándo atacan | Gráfico por hora y hora peak en el dashboard | Gráfico de activaciones por hora del dashboard, calculado desde `eventos.csv` |
 | No desperdiciar agua | Rocío solo con objetivo confirmado entre 15 y 50 cm; contador de segundos de bomba | Indicador "Tiempo total de bomba" del dashboard |
 
-**Conclusión:** El prototipo v3 responde a las cuatro necesidades del Avance 1: detecta movimiento, confirma con distancia y cámara antes de actuar, ahuyenta con un rocío corto de agua y guarda cada evento para mostrar cuándo hay más actividad. Queda pendiente medirlo varias noches en el predio para confirmar con datos reales cuánto reduce el daño en los cultivos.
+**Conclusión:** El prototipo v3 responde a las cuatro necesidades del Avance 1: detecta movimiento, confirma con distancia y cámara antes de actuar, ahuyenta con un rocío corto de agua y guarda cada evento para mostrar cuándo hay más actividad. El siguiente paso es usarlo varias noches en el predio para medir cuánto reduce el daño en los cultivos.
