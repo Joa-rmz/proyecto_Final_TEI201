@@ -173,7 +173,7 @@ Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`*
 ### GitHub / Documentación
 - [x] README completo y FUENTES.md en la raíz
 - [x] Presentación Avance 3 (`documentacion/presentacion/`)
-- [ ] URL del repositorio en los slides
+- [x] URL del repositorio en los slides
 
 ---
 
