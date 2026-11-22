@@ -1,6 +1,6 @@
 # Fotografías del Prototipo
 
-> ⚠️ La pauta exige **mínimo 3 ángulos** del prototipo ensamblado (v3). La foto del primer montaje (ESP32) se movió a `iteraciones/iteracion_1/`.
+> La pauta exige **mínimo 3 ángulos** del prototipo ensamblado (v3). La foto del primer montaje (ESP32) se movió a `iteraciones/iteracion_1/`.
 
 | Archivo | Contenido |
 |---|---|
