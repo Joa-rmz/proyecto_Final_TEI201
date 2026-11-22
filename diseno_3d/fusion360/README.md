@@ -6,7 +6,7 @@
 |---|---|
 | `Montaje completo .step` | Ensamble completo del prototipo (encapsulado + componentes) |
 | `Pieza 1.stl` … `Pieza 6.stl` | Piezas individuales para impresión 3D |
-| `AgroSafe_ensamble_v3.f3z` | ⚠️ **Por subir** — archivo nativo de Fusion 360 (la pauta lo exige: sin `.f3d`/`.f3z` no se puede verificar el modelo) |
+| `AgroSafe_ensamble_v3.f3z` | **Por subir** — archivo nativo de Fusion 360 (la pauta lo exige: sin `.f3d`/`.f3z` no se puede verificar el modelo) |
 
 > Para exportar: Fusion 360 → File → Export → *Fusion 360 Archive (.f3z)*, incluyendo componentes referenciados.
 
