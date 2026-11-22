@@ -3,7 +3,7 @@
 | Archivo | Contenido |
 |---|---|
 | `modelo. completof3d.f3d` | Archivo nativo de Fusion 360 con el ensamble completo |
-| `Montaje con componentes` | Ensamble STEP con carcasa y todos los componentes internos |
+| `Montaje con componentes.step` | Ensamble STEP con carcasa y todos los componentes internos |
 | `Montaje completo .step` | Ensamble STEP del encapsulado |
 | `Pieza 1.stl` … `Pieza 6.stl` | Piezas individuales para impresión 3D |
 
