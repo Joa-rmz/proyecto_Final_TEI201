@@ -1,3 +1,5 @@
-# Reporte Final
+# Informe del proyecto
 
-Subir `reporte_final_v3.pdf`. Puede incluir el protocolo de pruebas (`testing/reportes/protocolo_pruebas.md`) y la justificación de componentes (`hardware/README.md`).
+No se pide un informe escrito aparte: **el repositorio de GitHub es el informe**.
+
+Ver el índice de secciones en el [README principal](../../README.md).
