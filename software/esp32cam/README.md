@@ -44,4 +44,4 @@ La Raspberry obtiene las capturas de la ESP32-CAM mediante el módulo `software/
 
 ## Alimentación
 - 5 V con al menos 500 mA (los picos al transmitir por WiFi reinician el módulo si la fuente es débil).
-- `[COMPLETAR: alimentada desde la misma batería / otra fuente]`
+- Se alimenta desde la Raspberry Pi: pin 5V de la ESP32-CAM a un pin de 5 V de la Raspberry y GND a GND. La Raspberry a su vez se alimenta de la batería de 20.000 mAh.
