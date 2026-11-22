@@ -14,6 +14,7 @@
 | Descarga CSV y API JSON | Análisis posterior de varias noches |
 
 ### Hardware
+- Se integró una **ESP32-CAM** que toma una foto por WiFi en cada activación (confirma si es un conejo).
 - `[COMPLETAR: integración en carcasa, relé + bomba, cámara, etc.]`
 
 ### Diseño 3D
