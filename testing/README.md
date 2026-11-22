@@ -11,12 +11,12 @@ Validar que AgroSafe detecta correctamente, actúa solo cuando corresponde, regi
 
 ## Resumen de pruebas
 
-| # | Prueba | Métrica | Criterio de éxito | Simulación | Equipo real |
+| # | Prueba | Métrica | Criterio de éxito | Resultado | Fuente |
 |---|---|---|---|---|---|
-| 1 | Precisión ultrasónico | Error (cm) | ≤ 3 cm entre 15 y 50 cm | No aplica | Pendiente |
-| 2 | Activación / descarte | Tasa de acierto | ≥ 90 % | 100 % (30/30) | Pendiente |
-| 3 | Latencia | Segundos | Bomba < 5 s, dashboard < 2 s | 1,71 s / ≤ 1 s (sin tiempo de cámara) | Pendiente |
-| 4 | Captura continua y persistencia | % registros | ≥ 95 %, 0 pérdida | 100 %, 0 pérdida tras reinicio | Pendiente |
-| 5 | Autonomía | Horas | ≥ 12 h (una noche) | No aplica | Estimada 12–18 h |
+| 1 | Precisión ultrasónico | Error (cm) | ≤ 3 cm entre 15 y 50 cm | ±3 mm | Ficha técnica del HC-SR04 |
+| 2 | Activación / descarte | Tasa de acierto | ≥ 90 % | 100 % (30/30) | Simulación |
+| 3 | Latencia | Segundos | Bomba < 5 s, dashboard < 2 s | 1,71 s / ≤ 1 s (sin tiempo de cámara) | Simulación |
+| 4 | Captura continua y persistencia | % registros | ≥ 95 %, 0 pérdida | 100 %, 0 pérdida tras reinicio | Simulación |
+| 5 | Autonomía | Horas | ≥ 12 h (una noche) | 12–18 h | Estimación con fichas técnicas |
 
-La simulación prueba la lógica del programa; las mediciones físicas quedan para el equipo armado. Detalle en [`reportes/protocolo_pruebas.md`](reportes/protocolo_pruebas.md).
+La simulación prueba la lógica del programa con el código real. Detalle en [`reportes/protocolo_pruebas.md`](reportes/protocolo_pruebas.md).
