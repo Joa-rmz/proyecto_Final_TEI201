@@ -4,37 +4,43 @@
 
 ```mermaid
 flowchart TD
-    A[Inicio: GPIO + CSV] --> B{¿PIR detecta movimiento?}
-    B -- No --> R[Cada 5 s: registrar 'reposo'] --> B
-    B -- Sí --> C[Medir distancia HC-SR04]
-    C --> D{¿0 < distancia < 150 cm?}
-    D -- Sí --> E[Rociador ON 5 s + foto]
-    E --> F[Registrar 'activado' en CSV]
-    F --> G[Enfriamiento 8 s] --> B
-    D -- No --> H[Registrar 'descartado'] --> B
+    A[Inicio: CSV + sensores + dashboard] --> B{¿PIR detecta movimiento?}
+    B -- No --> B
+    B -- Sí --> C{¿3 lecturas entre 15 y 50 cm?}
+    C -- No --> X[Registrar 'descarte']
+    C -- Sí --> D{¿Captura 1 y 2 con figura objetivo?}
+    D -- No --> X
+    D -- Sí --> E{¿Distancia final entre 15 y 50 cm?}
+    E -- No --> X
+    E -- Sí --> F[Relé de la bomba ON 2 s + registrar 'activacion']
+    F --> G[Pausa 5 s + rearme del PIR]
+    X --> G
+    G --> B
 ```
 
 ## Funciones principales
 
-**`medir_distancia_cm()`** — Envía un pulso de 10 µs por TRIG y mide el tiempo del eco. Retorna `float` (cm) o `-1` si no hay eco en 50 ms.
+**`comprobar_distancia(pir, sensor)`** — Toma 3 lecturas cada 0,2 s y retorna `True` solo si todas están entre 15 y 50 cm.
 
-**`registrar(estado, distancia, foto=False)`** — Crea el evento con fecha y hora, lo agrega a la lista en memoria y lo escribe en `data/eventos.csv`.
+**`evaluar(pir, sensor)`** — Verifica distancia, hace 2 capturas con `detectar_estrella()` y vuelve a verificar la distancia. Retorna `True` si se debe activar la bomba.
 
-**`calcular_estadisticas()`** — Retorna un diccionario con: `activaciones_hoy`, `descartes_hoy`, `tasa_confirmacion`, `distancia_promedio`, `segundos_rocio_hoy`, `activaciones_ultima_hora`, `alerta`, `hora_peak`, `por_hora` (lista de 24 valores) e `historico_total`.
+**`registrar(mensaje, tipo)`** — Agrega el evento al historial de la sesión y lo escribe en `data/eventos.csv` con fecha, hora, tipo y distancia.
+
+**`calcular_estadisticas()`** — Retorna detecciones, activaciones y descartes del día, % de confirmación, segundos de bomba, activaciones de la última hora, alerta, hora de mayor actividad y activaciones por hora.
 
 ## Manual de operación
 
 ### Encendido
-1. Conectar la batería de 20.000 mAh a la Raspberry Pi.
+1. Encender la ESP32-CAM y conectar la batería a la Raspberry Pi.
 2. Esperar ~1 min a que inicie el sistema operativo.
-3. Ejecutar `python3 agrosafe.py` (o dejarlo como servicio al inicio).
+3. Ejecutar `python3 agrosafe.py`.
 4. Abrir el dashboard en `http://<IP>:5000`.
 
 ### Lectura del dashboard
-- **Estado actual:** verde = reposo, naranjo = descartado, rojo = activado.
+- **Estado:** fase actual del ciclo (esperando movimiento, comprobando distancia, analizando captura, activando bomba, pausa).
 - **Alerta roja:** ≥ 5 activaciones en la última hora → revisar el predio y el estanque.
 - **Hora de mayor actividad:** permite reforzar la protección en ese horario.
-- **Descargar datos (CSV):** para analizar varias noches en Excel o R.
+- **Descargar historial (CSV):** para analizar varias noches en Excel o R.
 
 ### Apagado
-`Ctrl + C` en la terminal (apaga el LED y libera los pines), luego `sudo shutdown now`.
+`Ctrl + C` en la terminal (apaga el relé y libera los pines), luego `sudo shutdown now`.
