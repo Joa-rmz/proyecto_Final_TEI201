@@ -5,7 +5,7 @@
 | Microcontrolador | ESP32 + Raspberry | Raspberry Pi 4 Model B | Raspberry Pi 4 Model B |
 | Sensores | Solo PIR | PIR + ultrasónico | PIR + ultrasónico + ESP32-CAM |
 | Protección ECHO | Directo a 5 V | Divisor de voltaje | Divisor de voltaje |
-| Lógica | Activa con cualquier movimiento | Rocía solo a < 1,5 m | Igual + registro de todos los eventos |
+| Lógica | Activa con cualquier movimiento | Rocía 5 s solo a < 1,5 m | Rocía 2 s solo entre 15 y 50 cm y con la figura confirmada en 2 capturas |
 | Datos | — | Últimos 30 eventos en memoria | CSV persistente + estadísticas |
 | Dashboard | — | Tabla de eventos (Flask) | Indicadores, gráfico por hora, alerta, descarga CSV |
-| Encapsulado | — | Piezas 3D separadas | Ensamble completo `[COMPLETAR]` |
+| Encapsulado | — | Piezas 3D separadas | Ensamble completo con componentes internos, planos y renders |
