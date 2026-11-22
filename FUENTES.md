@@ -21,30 +21,21 @@ Proyecto: **AgroSafe** · TEI201 Taller de Diseño en Ingeniería · Grupo 6 · 
 
 ---
 
-## 2. Código externo adaptado
 
-### Medición de distancia con HC-SR04 (`medir_distancia_cm()` en `software/src/agrosafe.py`)
-- Fuente: patrón estándar TRIG/ECHO para HC-SR04 en Raspberry Pi. `[COMPLETAR: URL del tutorial que usaron, p. ej. The Pi Hut / Random Nerd Tutorials]`
-- Adaptación: se usa `time.monotonic()` en vez de `time.time()` y se agregó un tiempo límite de 50 ms que devuelve `-1` si no hay eco, para que el programa no se quede bloqueado.
-
-### Firmware de la ESP32-CAM (ejemplo `CameraWebServer`)
-- Fuente: ejemplo oficial del núcleo ESP32 para Arduino, https://github.com/espressif/arduino-esp32/tree/master/libraries/ESP32/examples/Camera/CameraWebServer
-- Adaptación: se seleccionó `CAMERA_MODEL_AI_THINKER` y se configuró la red WiFi. `[COMPLETAR: otros cambios, p. ej. resolución]`. La Raspberry usa su endpoint `/capture` para obtener una foto en cada activación.
-
-### Divisor de voltaje para ECHO (5 V → 3,3 V)
-- Fuente: `[COMPLETAR]`
-- Adaptación: `[COMPLETAR: valores de resistencias usados]`
-
----
-
-## 3. Uso de Inteligencia Artificial
+## 2. Uso de Inteligencia Artificial
 
 ### Modelo 3D del encapsulado (diseno_3d/fusion360/)
 - Herramienta: Claude (Anthropic), noviembre 2026, junto con Autodesk Fusion 360.
 - Uso: el equipo le entregó a Claude los requisitos del encapsulado y las medidas de los componentes reales (Raspberry Pi 4 Model B, HC-SR04, PIR HC-SR501, ESP32-CAM, relé, protoboard, batería, pila y manguera). A partir de eso, Claude ayudó a crear el modelo 3D de las 6 piezas (base, tapa, bandeja, placa soporte del protoboard, torreta y tapa de torreta) y el ensamble con los componentes, que luego se trabajó en Fusion 360 y se exportó como `AgroSafe_montaje_completo_con_componentes.step` y piezas STL.
 - Requisitos definidos por el equipo: encapsulado de dos cuerpos (base fija y torreta con sensores arriba), tapa removible con tornillos para reparación, ventilación, paso de manguera y aberturas para cada sensor y la cámara.
-- Adaptación: el equipo revisó en Fusion 360 que cada componente cupiera y [completar: ajustes que hicieron, p. ej. holguras, posición de sensores, espesores].
-- Comprensión: la base aloja la electrónica y tiene ventana de servicio y rejilla de ventilación; la tapa se fija con 4 tornillos M3 para poder abrirla en reparaciones; la bandeja sostiene la Raspberry Pi 4 con su patrón de 58 × 49 mm; la torreta ubica los sensores con aberturas a su medida.
+- Adaptación: el equipo revisó en Fusion 360 que cada componente cupiera y asimismo se realizaron cambios según los requerimientos que se fueron encontrando.
+
+
+### Realización del código
+- Fuente: ChatGPT (OpenAI).
+- Uso: se utilizó como apoyo para la realización del código.
+
+
 
 ### Planos técnicos y renders (diseno_3d/planos/ y diseno_3d/renders/)
 - Herramienta: Claude (Anthropic), noviembre 2026.
