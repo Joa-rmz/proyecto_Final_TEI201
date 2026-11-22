@@ -9,7 +9,7 @@
 | Campo | Detalle |
 |---|---|
 | **Objetivo** | Verificar que el HC-SR04 mide correctamente la distancia que decide si se rocía. |
-| **Condiciones** | Interior, objeto plano de `[COMPLETAR]` cm, sensor fijo en la torreta. |
+| **Condiciones** | Interior, objeto plano (cartón), sensor fijo en la torreta. |
 | **Procedimiento** | 1. Ubicar el objeto a 15, 25, 35, 50 y 80 cm (medido con huincha). 2. Tomar 10 lecturas en cada distancia desde `/api/estado` o el CSV. 3. Calcular promedio y error. |
 | **Criterio de éxito** | Error promedio ≤ 3 cm entre 15 y 50 cm. |
 
@@ -63,7 +63,7 @@
 | Campo | Detalle |
 |---|---|
 | **Objetivo** | Demostrar que el sistema registra sin interrupciones y que los datos sobreviven a un reinicio. |
-| **Procedimiento** | 1. Dejar el sistema funcionando `[COMPLETAR]` horas. 2. Generar N movimientos y contar que cada uno tenga su fila en `eventos.csv`. 3. Desconectar la energía, reiniciar y verificar que los indicadores del día siguen en el dashboard. |
+| **Procedimiento** | 1. Dejar el sistema funcionando 2 horas. 2. Generar N movimientos y contar que cada uno tenga su fila en `eventos.csv`. 3. Desconectar la energía, reiniciar y verificar que los indicadores del día siguen en el dashboard. |
 | **Criterio de éxito** | 100 % de los eventos registrados; 0 datos perdidos tras reinicio. |
 
 | Duración (h) | Eventos generados | Filas en CSV | % registrados | ¿Datos tras reinicio? |
@@ -76,7 +76,7 @@
 
 | Duración total (h) | Consumo medido (mA) | Observaciones |
 |---|---|---|
-| | | |
+| | | No se contó con tester USB; autonomía estimada con fichas técnicas: 12 a 18 h |
 
 ---
 
@@ -84,12 +84,17 @@
 
 | Falla encontrada | Causa | Solución aplicada | Resultado |
 |---|---|---|---|
-| Falsas activaciones con solo PIR (Avance 2) | El PIR detecta cualquier calor en movimiento a 3–7 m | Se agregó el HC-SR04 (15–50 cm) y la confirmación con 2 capturas de cámara | `[COMPLETAR con datos de Prueba 2]` |
+| Falsas activaciones con solo PIR (Avance 2) | El PIR detecta cualquier calor en movimiento a 3–7 m | Se agregó el HC-SR04 (15–50 cm) y la confirmación con 2 capturas de cámara | Ver Prueba 2 |
 | ECHO conectado directo a 5 V (Avance 2) | Riesgo de dañar el GPIO de 3,3 V | Divisor de voltaje | Sin daños en la Raspberry |
-| Datos se perdían al reiniciar | Eventos solo en memoria (últimos 50) | Escritura en `eventos.csv` en cada evento | `[COMPLETAR con Prueba 4]` |
-| `[COMPLETAR: falla nueva de Avance 3]` | | | |
+| Datos se perdían al reiniciar | Eventos solo en memoria (últimos 50) | Escritura en `eventos.csv` en cada evento | Ver Prueba 4 |
+| Una lectura aislada del HC-SR04 podía activar la bomba | Rebotes y lecturas erróneas del ultrasónico | Se exigen 3 lecturas seguidas entre 15 y 50 cm, y una verificación final antes de rociar | Incorporado en `agrosafe.py` |
 
-**Propuestas de mejora:** `[COMPLETAR, p. ej. confirmación por cámara para distinguir conejos de perros, protección IP del encapsulado]`
+**Propuestas de mejora:**
+1. Reemplazar el reconocimiento de la figura por un modelo entrenado con fotos de conejos reales.
+2. Sellar la carcasa para que resista lluvia y polvo en terreno.
+3. Dejar una IP fija para la ESP32-CAM, así no hay que cambiar el código si cambia la red.
+4. Enviar la alerta de alta actividad al celular del agricultor.
+5. Agregar un panel solar para no depender de recargar la batería.
 
 ---
 
@@ -101,7 +106,7 @@ En el Avance 1 se identificó que los agricultores del Valle del Choapa enfrenta
 |---|---|---|
 | Detectar la presencia de conejos | PIR + ultrasónico | Pruebas 1 y 2 |
 | Ahuyentar sin dañar | Rocío de agua de 2 s | Prueba 2 |
-| Saber cuándo atacan | Gráfico por hora y hora peak en el dashboard | `[COMPLETAR: captura del gráfico tras N noches]` |
-| No desperdiciar agua | Rocío solo con objetivo confirmado entre 15 y 50 cm; contador de segundos de bomba | `[COMPLETAR: segundos de rocío por noche]` |
+| Saber cuándo atacan | Gráfico por hora y hora peak en el dashboard | Gráfico de activaciones por hora del dashboard, calculado desde `eventos.csv` |
+| No desperdiciar agua | Rocío solo con objetivo confirmado entre 15 y 50 cm; contador de segundos de bomba | Indicador "Tiempo total de bomba" del dashboard |
 
-**Conclusión:** `[COMPLETAR, p. ej. "Durante X noches el sistema registró N activaciones, con peak entre las HH y HH. Esto permite al agricultor..."]`
+**Conclusión:** El prototipo v3 responde a las cuatro necesidades del Avance 1: detecta movimiento, confirma con distancia y cámara antes de actuar, ahuyenta con un rocío corto de agua y guarda cada evento para mostrar cuándo hay más actividad. Queda pendiente medirlo varias noches en el predio para confirmar con datos reales cuánto reduce el daño en los cultivos.
