@@ -1,37 +1,40 @@
 # Diseño 3D - AgroSafe
 
-Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
+Encapsulado de dos cuerpos (base fija y torreta con sensores) con gemelo 3D de todos los componentes internos.
 
 | Pieza | Dimensiones | Función |
 |---|---|---|
-| Base fija | 132 × 132 × 203 mm | Aloja Raspberry Pi 4 Model B (85 × 56 mm), protoboard, batería y cableado. Tapa removible para mantenimiento. |
-| Torreta giratoria | 59 × 81 × 88 mm | Sensores PIR y HC-SR04 arriba (campo de visión despejado), brazo y boquilla. Gira con servomotor. |
+| Base | 145 × 145 × 143 mm | Aloja la Raspberry Pi 4 Model B, batería, pila, relé y protoboard. Ventana de servicio, rejilla de ventilación y tubo pasamanguera. |
+| Tapa | 140 × 140 × 6,9 mm | Cierra la base con 4 tornillos M3 (desmontable para reparación) y sostiene la torreta. |
+| Bandeja | 132,8 × 132,8 × 45,6 mm | Soporta la Raspberry Pi 4 (separadores 58 × 49 mm) y los postes de la placa del protoboard. |
+| Placa soporte protoboard | 60 × 87 × 6 mm | Aloja el protoboard de 400 puntos. |
+| Torreta | 51 × 43,5 × 109 mm (disco Ø59,3) | Ubica el HC-SR04, el PIR, la ESP32-CAM y la boquilla. |
+| Tapa de torreta | 51 × 43,5 × 5 mm | Cierra la torreta a presión. |
 
 **Software:** Autodesk Fusion 360 · **Unidades:** mm · **Escala:** 1:1
-**Material:** PLA (prototipo) · PETG (uso exterior: resiste sol y humedad)
-**Detalles:** aberturas de ventilación y pasacables.
+**Material:** PETG (prototipo en PLA)
 
 ## Carpetas
-- `fusion360/` — `Montaje completo .step` (ensamble) + `Pieza 1.stl` a `Pieza 6.stl` · **falta `.f3d`/`.f3z`**
-- `planos/` — planos técnicos en PDF
-- `renders/` — renders exterior y explosionado
+- `fusion360/` — archivo de Fusion 360, ensambles STEP y piezas STL
+- `planos/` — planos técnicos en PDF (4 láminas A3)
+- `renders/` — vista exterior, desarmada e interior
 
-## Gemelo 3D — componentes que deben estar en el ensamble
+## Gemelo 3D — componentes incluidos en el ensamble
 
-| Componente | Volumen de referencia (mm) |
+| Componente | Volumen en el modelo (mm) |
 |---|---|
-| Raspberry Pi 4 Model B | 85 × 56 × 17 |
-| Protoboard | 82 × 54 × 9 |
-| Batería 20.000 mAh | 50 × 25 × 15 |
-| Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) |
-| Sensor HC-SR04 | 45 × 20 × 15 |
-| ESP32-CAM | 27 × 40 × 12 (con cámara) |
-| Mini bomba | 44 × 23 × 23 |
-| Tornillería | M3 |
-| Relé | 35 × 26 × 19 |
+| Raspberry Pi 4 Model B | 87 × 56,5 × 17 |
+| Protoboard 400 puntos | 82 × 54 × 9,1 |
+| Batería 20.000 mAh | 100,5 × 64,1 × 31,8 |
+| Pila 9 V | 50 × 25 × 15 |
+| Módulo relé 1 canal | 35 × 26 × 17 |
+| Sensor PIR HC-SR501 | 34 × 23,2 × 23 |
+| Sensor HC-SR04 | 45 × 23,3 × 20 |
+| ESP32-CAM | 22 × 20,2 × 40 |
+| Manguera | recorrido desde la base hasta la boquilla |
 
 ## Checklist
-- [ ] `fusion360/AgroSafe_ensamble_v3.f3z` con carcasa + componentes internos
-- [x] `fusion360/Montaje completo .step` y piezas STL (6)
-- [ ] `planos/plano_conjunto_v3.pdf` (vistas ortogonales, cotas, tolerancias, escala)
-- [ ] `renders/01_exterior.png` y `renders/02_explosionado.png`
+- [x] Archivo de Fusion 360 (`fusion360/modelo. completof3d.f3d`)
+- [x] Ensamble STEP con todos los componentes y piezas STL
+- [x] Planos técnicos en PDF (vistas, cortes, cotas, tolerancias, escala)
+- [x] Renders exterior, desarmado e interior
