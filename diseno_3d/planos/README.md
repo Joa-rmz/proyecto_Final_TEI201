@@ -1,6 +1,6 @@
 # Planos Técnicos
 
-> ⚠️ Exportar desde Fusion 360 (Drawing → From Design) y subir en PDF.
+> Exportar desde Fusion 360 (Drawing → From Design) y subir en PDF.
 
 | Archivo | Contenido |
 |---|---|
