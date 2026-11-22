@@ -41,7 +41,6 @@ Proyecto: **AgroSafe** · TEI201 Taller de Diseño en Ingeniería · Grupo 6 · 
   - "porque dos imagenes??"
   - "mira hagamos algo en ves de que detecte conejos, detecta formas geometricas, si son estrellas se actiba si son otra no"
   - A partir de ahí, ChatGPT guió paso a paso (el equipo respondía «listo» en cada paso) la prueba de la cámara (`http://10.77.103.105/capture`), la instalación de OpenCV, la detección de la estrella sin activar el relé y, al final, la conexión con el relé GPIO27.
-- Conversaciones compartidas: [Recordar AgroSafe](https://chatgpt.com/share/6b03796e-0444-83e9-9f8c-f0cabe0ffcbb), [Revisar código AGROSAFE Raspberry Pi](https://chatgpt.com/s/cx_6b0379a7dfbc8191a20ad71dbfab3bd1) e [Implementar detección segura de estrellas](https://chatgpt.com/s/cx_6b0379548e488191b741652511ae888d).
 - Adaptación: el equipo definió los pines según el montaje real (PIR GPIO 17, TRIG 23, ECHO 24, relé 27), el rango de 15–50 cm, el pulso de 2 s, la pausa de 5 s y la figura objetivo usada en la demostración.
 - Comprensión: `controlar()` espera movimiento del PIR; `evaluar()` exige 3 lecturas entre 15 y 50 cm, 2 capturas en que `detectar_estrella()` reconoce la figura y una verificación final de distancia. Solo si todo se cumple, el relé enciende la bomba 2 s (con `try/finally` para asegurar que siempre se apague). Luego hay una pausa de 5 s y `esperar_rearme()` espera a que termine el movimiento para no activar dos veces por el mismo animal. El servidor Flask corre en otro hilo para que el dashboard responda durante el control.
 
