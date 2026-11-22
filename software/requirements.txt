@@ -1,0 +1,5 @@
+# Dependencias de AgroSafe (Raspberry Pi OS)
+# Instalar con: sudo apt install python3-flask python3-rpi.gpio python3-picamera2
+flask>=2.2
+RPi.GPIO>=0.7
+# picamera2  # opcional, solo si se usa la cámara
