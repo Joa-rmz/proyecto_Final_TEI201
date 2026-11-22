@@ -42,17 +42,19 @@ Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta c
 ## Solución
 
 ```
-PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto ESP32-CAM → Evento guardado en CSV → Dashboard + alertas
+PIR detecta movimiento → Ultrasónico confirma 15–50 cm → 2 capturas con reconocimiento → Bomba 2 s → Evento guardado en CSV → Dashboard + alertas
 ```
 
 | Capa | Implementación |
 |---|---|
-| Captura | Sensor PIR HC-SR501 + sensor ultrasónico HC-SR04 + ESP32-CAM (foto del animal por WiFi) |
+| Captura | Sensor PIR HC-SR501 + sensor ultrasónico HC-SR04 + ESP32-CAM con reconocimiento de imagen |
 | Procesamiento | Raspberry Pi 4 Model B (Python) |
-| Actuador | LED indicador (representa relé + mini bomba de agua) |
+| Actuador | Relé de 1 canal que activa la mini bomba de agua (pulso de 2 s) |
 | Almacenamiento | CSV estructurado persistente (`software/data/eventos.csv`) |
 | Dashboard | Flask por WiFi, visible desde el celular |
-| Información | Activaciones del día, hora peak, % de confirmación, tiempo de rocío, gráfico por hora, alerta de alta actividad |
+| Información | Detecciones, activaciones y descartes del día, hora de mayor actividad, % de confirmación, tiempo de bomba, gráfico por hora, alerta de alta actividad |
+
+Para la demostración, el reconocimiento por cámara detecta una **figura de estrella** que representa al conejo (en el dashboard aparece como "conejo").
 
 **¿Qué decisiones permite tomar?** El agricultor identifica el horario de mayor actividad de conejos, detecta noches de alta presión (alerta) y estima el consumo de agua del sistema.
 
@@ -83,13 +85,12 @@ PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto E
 |---|---|---|
 | Raspberry Pi 4 Model B | 1 | Procesamiento, WiFi y dashboard |
 | Sensor PIR HC-SR501 | 1 | Detección de movimiento |
-| Sensor ultrasónico HC-SR04 | 1 | Confirmación de distancia (< 150 cm) |
-| ESP32-CAM (AI-Thinker, OV2640) + programador FTDI | 1 | Foto del animal al activarse; confirma si es un conejo |
-| LED + resistencia 220 Ω | 1 | Indicador del rociador |
+| Sensor ultrasónico HC-SR04 | 1 | Confirmación de distancia (15–50 cm) |
+| ESP32-CAM (AI-Thinker, OV2640) + programador FTDI | 1 | Capturas para el reconocimiento de la figura objetivo |
 | Resistencias para divisor de voltaje | 2 | ECHO 5 V → 3,3 V |
 | Protoboard + cables jumper | 1 | Conexiones |
 | Batería externa 20.000 mAh | 1 | Alimentación portátil |
-| Mini bomba de agua + relé | 1 | Actuador final (en integración) |
+| Mini bomba de agua + relé 1 canal + pila 9 V | 1 | Rocío disuasivo |
 
 Detalle con costos en [`hardware/bom/`](hardware/bom/).
 
@@ -101,7 +102,7 @@ Detalle con costos en [`hardware/bom/`](hardware/bom/).
 | Elemento | GPIO | Pin físico |
 |---|---|---|
 | PIR (OUT) | GPIO 17 | 11 |
-| LED / relé | GPIO 18 | 12 |
+| Relé de la bomba | GPIO 27 | 13 |
 | HC-SR04 TRIG | GPIO 23 | 16 |
 | HC-SR04 ECHO (**con divisor de voltaje**) | GPIO 24 | 18 |
 | 5 V / GND | — | 2 / 6 |
@@ -118,21 +119,20 @@ Detalle en [`software/esp32cam/`](software/esp32cam/).
 ### 3. Instalar dependencias en la Raspberry Pi
 ```bash
 sudo apt update
-sudo apt install python3-flask python3-rpi.gpio
+sudo apt install python3-flask python3-gpiozero
 ```
 
 ### 4. Clonar y ejecutar
 ```bash
 git clone https://github.com/Joa-rmz/proyecto_Final_TEI201.git
 cd proyecto_Final_TEI201/software/src
-ESP32_CAM_URL=http://<IP-ESP32-CAM>/capture python3 agrosafe.py
+python3 agrosafe.py
 ```
 
 ### 5. Abrir el dashboard
 Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`** (IP con `hostname -I`).
 - `/datos.csv` → descarga del histórico
 - `/api/estadisticas` → indicadores en JSON
-- La última foto de la ESP32-CAM aparece en el dashboard tras cada activación
 
 ---
 
