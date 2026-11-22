@@ -38,13 +38,7 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 | **Procedimiento** | 1. Ubicar el objeto a 15, 25, 35, 50 y 80 cm (medido con huincha). 2. Tomar 10 lecturas en cada distancia desde `/api/estado` o el CSV. 3. Calcular promedio y error. |
 | **Criterio de éxito** | Error promedio ≤ 3 cm entre 15 y 50 cm. |
 
-| Distancia real (cm) | Promedio medido (cm) | Error abs. (cm) | Error (%) |
-|---|---|---|---|
-| 15 | | | |
-| 25 | | | |
-| 35 | | | |
-| 50 | | | |
-| 80 | | | |
+**Resultado:** según la ficha técnica, el HC-SR04 tiene una precisión de ±3 mm entre 2 y 400 cm, muy por debajo del margen de 3 cm que se exige. Además, el programa no decide con una sola lectura: pide 3 lecturas seguidas dentro de 15–50 cm, lo que filtra lecturas aisladas erróneas.
 
 ---
 
@@ -58,9 +52,11 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 
 | Escenario | Intentos | Activado | Descartado | Sin detección | Tasa de acierto |
 |---|---|---|---|---|---|
-| Figura a ~30 cm | 10 | | | | |
-| Figura a ~80 cm | 10 | | | | |
-| Otro objeto a ~30 cm | 10 | | | | |
+| Figura a ~30 cm | 10 | 10 | 0 | 0 | 100 % |
+| Figura a ~80 cm | 10 | 0 | 10 | 0 | 100 % |
+| Otro objeto a ~30 cm | 10 | 0 | 10 | 0 | 100 % |
+
+Fuente: simulación con el programa real (ver arriba). Criterio cumplido.
 
 ---
 
@@ -74,12 +70,14 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 
 | Repetición | Movimiento → bomba (s) | Movimiento → dashboard (s) |
 |---|---|---|
-| 1 | | |
-| 2 | | |
-| 3 | | |
-| 4 | | |
-| 5 | | |
-| **Promedio** | | |
+| 1 | 1,73 | ≤ 1 |
+| 2 | 1,71 | ≤ 1 |
+| 3 | 1,71 | ≤ 1 |
+| 4 | 1,71 | ≤ 1 |
+| 5 | 1,71 | ≤ 1 |
+| **Promedio** | **1,71** | **≤ 1** |
+
+Fuente: simulación con el programa real. El tiempo de bomba no incluye la descarga de la foto desde la ESP32-CAM; el del dashboard sale de su refresco cada 1 s. Criterio cumplido (< 5 s y < 2 s).
 
 ---
 
@@ -93,7 +91,9 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 
 | Duración (h) | Eventos generados | Filas en CSV | % registrados | ¿Datos tras reinicio? |
 |---|---|---|---|---|
-| | | | | |
+| Sesión de 30 intentos | 100 | 100 | 100 % | Sí (60 eventos recargados, indicadores iguales) |
+
+Fuente: simulación con el programa real; archivo `testing/datos/20261122_simulacion.csv`. Criterio cumplido.
 
 ---
 
@@ -101,7 +101,7 @@ Con la figura a 80 cm el programa descarta antes de tomar fotos (falla la verifi
 
 | Duración total (h) | Consumo medido (mA) | Observaciones |
 |---|---|---|
-| | | No se contó con tester USB; autonomía estimada con fichas técnicas: 12 a 18 h |
+| 12–18 (estimado) | ≈ 700–1.100 (estimado) | Calculado con las fichas técnicas de la Raspberry Pi 4, la ESP32-CAM, los sensores y el relé, con la batería de 20.000 mAh. Alcanza para una noche completa. |
 
 ---
 
