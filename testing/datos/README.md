@@ -1,13 +1,17 @@
 # Datos de Testing
 
-Copiar aquí el `eventos.csv` de cada sesión (descargable desde `http://<IP>:5000/datos.csv`), nombrado `AAAAMMDD_prueba_N.csv`.
+Copias del `eventos.csv` de cada sesión (descargable desde `http://<IP>:5000/datos.csv`), con nombre `AAAAMMDD_prueba.csv`.
+
+| Archivo | Sesión |
+|---|---|
+| `20261122_simulacion.csv` | Simulación del programa (30 intentos, ver `testing/simulacion/`) |
 
 ## Formato
 
 | Columna | Descripción | Ejemplo |
 |---|---|---|
 | `fecha` | AAAA-MM-DD | 2026-11-22 |
-| `hora` | HH:MM:SS | 21:14:03 |
-| `estado` | `activado` / `descartado` / `reposo` | activado |
-| `distancia_cm` | Distancia medida (−1 = sin eco) | 84.2 |
-| `foto` | Si se tomó foto | True |
+| `hora` | HH:MM:SS | 20:05:48 |
+| `tipo` | `deteccion` / `activacion` / `descarte` / `info` / `error` | activacion |
+| `mensaje` | Texto del evento | Estrella confirmada. Pulso de 2 segundos. |
+| `distancia_cm` | Última distancia medida | 29.4 |
