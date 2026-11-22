@@ -11,9 +11,9 @@
 | Desde | Hacia |
 |---|---|
 | RPi pin 2 (5 V) | Riel + protoboard → VCC PIR, VCC HC-SR04 |
-| RPi pin 6 (GND) | Riel − protoboard → GND PIR, GND HC-SR04, cátodo LED, divisor |
+| RPi pin 6 (GND) | Riel − protoboard → GND PIR, GND HC-SR04, GND relé, divisor |
 | RPi pin 11 (GPIO 17) | OUT PIR |
-| RPi pin 12 (GPIO 18) | 220 Ω → ánodo LED (o entrada del relé) |
+| RPi pin 13 (GPIO 27) | IN del módulo relé (bomba + pila 9 V en contacto NA) |
 | RPi pin 16 (GPIO 23) | TRIG HC-SR04 |
 | ECHO HC-SR04 | R1 → nodo → pin 18 (GPIO 24); nodo → R2 → GND |
 
