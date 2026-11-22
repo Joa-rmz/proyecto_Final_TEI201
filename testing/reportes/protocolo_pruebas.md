@@ -1,6 +1,6 @@
 # Protocolo de Pruebas — AgroSafe (Avance 3)
 
-> ⚠️ Las tablas de resultados están vacías: completarlas con las mediciones reales del equipo. No inventar datos.
+> Las tablas de resultados están vacías: completarlas con las mediciones reales del equipo. No inventar datos.
 
 ---
 
