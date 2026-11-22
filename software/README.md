@@ -8,7 +8,7 @@ Código y documentación del software de **AgroSafe**. Un único programa en Pyt
 
 | Etapa | Implementación |
 |---|---|
-| Captura | PIR HC-SR501 (leído cada 0,1 s) + HC-SR04 (confirmación de distancia) |
+| Captura | PIR HC-SR501 (leído cada 0,1 s) + HC-SR04 (confirmación de distancia) + ESP32-CAM (foto por WiFi al activarse) |
 | Almacenamiento | `data/eventos.csv` — CSV estructurado (fecha, hora, estado, distancia, foto). Se escribe en cada evento y se recarga al reiniciar |
 | Visualización | Dashboard Flask en `http://<IP-Raspberry>:5000`, se actualiza cada 2 s |
 | Información | Activaciones del día, descartes, % de confirmación, hora peak, distancia promedio, tiempo de rocío, gráfico por hora y alerta de alta actividad |
@@ -19,6 +19,7 @@ Código y documentación del software de **AgroSafe**. Un único programa en Pyt
 ```
 software/
 ├── src/agrosafe.py     # Programa principal
+├── esp32cam/           # Firmware e instrucciones de la ESP32-CAM
 ├── data/               # eventos.csv se crea aquí al ejecutar
 ├── requirements.txt    # Dependencias
 ├── librerias/          # Documentación de librerías
@@ -32,14 +33,14 @@ software/
 - **GPIO:** RPi.GPIO
 - **Dashboard:** Flask
 - **Concurrencia:** `threading` (sensores y servidor web en paralelo)
-- **Cámara (opcional):** picamera2
+- **Cámara:** ESP32-CAM con firmware `CameraWebServer` (Arduino IDE, núcleo ESP32 de Espressif); respaldo opcional con picamera2
 
 ## 4. Funcionamiento
 
 1. Inicialización de pines y del archivo CSV.
 2. El PIR detecta movimiento.
 3. El HC-SR04 mide la distancia.
-4. Si la distancia es < 150 cm → se activa el rociador (LED/relé) 5 s, se toma foto y se registra `activado`.
+4. Si la distancia es < 150 cm → se activa el rociador (LED/relé) 5 s, se pide una foto a la ESP32-CAM y se registra `activado`.
 5. Si es ≥ 150 cm o no hay eco → se registra `descartado`.
 6. Enfriamiento de 8 s tras cada activación.
 7. Cada 5 s se registra `reposo` con la distancia actual (prueba de captura continua).
@@ -56,6 +57,8 @@ software/
 
 ## 6. Instalación y ejecución
 
+Primero cargar el firmware de la ESP32-CAM y anotar su IP (ver [`esp32cam/`](esp32cam/)). Luego, en la Raspberry:
+
 ```bash
 sudo apt update
 sudo apt install python3-flask python3-rpi.gpio
@@ -64,7 +67,7 @@ sudo apt install python3-picamera2
 
 git clone https://github.com/Joa-rmz/proyecto_Final_TEI201.git
 cd proyecto_Final_TEI201/software/src
-python3 agrosafe.py
+ESP32_CAM_URL=http://<IP-ESP32-CAM>/capture python3 agrosafe.py
 ```
 
 Abrir en el celular o computador (misma red WiFi): `http://<IP-de-la-Raspberry>:5000`
@@ -77,4 +80,4 @@ La IP se obtiene con `hostname -I`.
 | `/` | Dashboard |
 | `/api/estadisticas` | Indicadores en JSON |
 | `/datos.csv` | Descarga del histórico completo |
-| `/foto` | Última foto (si hay cámara) |
+| `/foto` | Última foto de la ESP32-CAM |
