@@ -1,10 +1,10 @@
 # Esquemas de Circuito
 
-![Esquema de conexiones](esquema_conexiones_v3.png)
+![Esquema de conexiones](esquematico_v3.png)
 
 ## Archivos
-- `esquema_conexiones_v3.png` — esquema de conexiones (imagen)
-- `esquema_conexiones_v3.pdf` — mismo esquema en PDF (A3)
+- `esquematico_v3.png` — esquemático eléctrico (imagen)
+- `esquematico_v3.pdf` — mismo esquemático en PDF
 
 ## Conexiones (referencia para dibujar el esquema)
 
