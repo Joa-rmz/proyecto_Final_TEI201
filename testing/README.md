@@ -12,8 +12,8 @@ Validar que AgroSafe detecta correctamente, actúa solo cuando corresponde, regi
 
 | # | Prueba | Métrica | Criterio de éxito | Resultado |
 |---|---|---|---|---|
-| 1 | Precisión ultrasónico | Error (cm) | ≤ 3 cm bajo 150 cm | `[ ]` |
+| 1 | Precisión ultrasónico | Error (cm) | ≤ 3 cm entre 15 y 50 cm | `[ ]` |
 | 2 | Activación / descarte | Tasa de acierto | ≥ 90 % | `[ ]` |
-| 3 | Latencia | Segundos | LED < 1 s, dashboard < 3 s | `[ ]` |
+| 3 | Latencia | Segundos | Bomba < 5 s, dashboard < 2 s | `[ ]` |
 | 4 | Captura continua y persistencia | % registros | ≥ 95 %, 0 pérdida | `[ ]` |
 | 5 | Autonomía | Horas | `[definir]` | `[ ]` |
