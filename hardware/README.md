@@ -13,7 +13,7 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 
 | Componente | Por qué se eligió |
 |---|---|
-| **Raspberry Pi 4 Model B** | WiFi integrado para el dashboard, corre Python + Flask y guarda el CSV en la microSD. Permite integrar cámara (CSI). Procesador de 4 núcleos a 1,5 GHz: corre sensores, servidor web y cámara en paralelo sin perder lecturas. Reemplazó a ESP32 + Raspberry, simplificando todo a un solo programa. |
+| **Raspberry Pi 4 Model B** | WiFi integrado para el dashboard, corre Python + Flask y guarda el CSV en la microSD. Recibe las fotos de la ESP32-CAM por WiFi. Procesador de 4 núcleos a 1,5 GHz: corre sensores, servidor web y cámara en paralelo sin perder lecturas. Reemplazó a ESP32 + Raspberry, simplificando todo a un solo programa. |
 | **ESP32-CAM (AI-Thinker, OV2640)** | Cámara de 2 MP con WiFi integrado y bajo costo. Toma 2 capturas antes de cada activación para confirmar la figura objetivo (el PIR y el ultrasónico no distinguen especies). Al comunicarse por WiFi no ocupa pines GPIO de la Raspberry y puede ubicarse en la torreta. |
 | **PIR HC-SR501** | Detecta calor en movimiento (un conejo es un cuerpo caliente) con alcance de 3–7 m y 110°; bajo consumo (< 65 µA) y salida de 3,3 V compatible directa con los GPIO. |
 | **Ultrasónico HC-SR04** | Rango 2–400 cm con ±3 mm de precisión. Confirma con 3 lecturas que el objetivo está entre 15 y 50 cm (alcance útil del rocío), lo que elimina las falsas activaciones del PIR solo. |
