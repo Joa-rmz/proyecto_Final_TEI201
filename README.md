@@ -1,10 +1,10 @@
-# 🐇 AgroSafe — Protección inteligente de cultivos
+# AgroSafe — Protección inteligente de cultivos
 
 Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta con un rocío de agua y registra cada evento** en un dashboard web, para que los agricultores del Valle del Choapa sepan cuándo y cuánto son atacados sus cultivos.
 
 **TEI201 — Taller de Diseño en Ingeniería · Universidad Adolfo Ibáñez · Grupo 6**
 
-> 📘 **Este repositorio es el informe del proyecto.** No hay un informe escrito aparte: cada sección del Avance 3 está documentada en su carpeta.
+> **Este repositorio es el informe del proyecto.** No hay un informe escrito aparte: cada sección del Avance 3 está documentada en su carpeta.
 
 | Sección del informe | Dónde está |
 |---|---|
@@ -21,7 +21,7 @@ Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta c
 
 ---
 
-## 👥 Integrantes
+## Integrantes
 
 | Nombre | Rol |
 |---|---|
@@ -33,13 +33,13 @@ Sistema IoT no letal que **detecta conejos cerca de los cultivos, los ahuyenta c
 
 ---
 
-## 🌱 Problema (Avance 1)
+## Problema (Avance 1)
 
 - **ODS 15:** Vida de ecosistemas terrestres — control de una especie exótica invasora.
 - El **conejo europeo** es una especie invasora en Chile. En el Valle del Choapa (comuna de Salamanca) se registran **entre 200 y 300 conejos por predio agrícola**, y recuperar un cultivo dañado toma **4 a 5 años**.
 - Los métodos actuales suelen ser letales. AgroSafe propone una **alternativa no letal**: detección temprana + rocío de agua.
 
-## 💡 Solución
+## Solución
 
 ```
 PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto ESP32-CAM → Evento guardado en CSV → Dashboard + alertas
@@ -58,7 +58,7 @@ PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto E
 
 ---
 
-## 📁 Estructura del Repositorio
+## Estructura del Repositorio
 
 ```
 ├── README.md          # Este archivo
@@ -77,7 +77,7 @@ PIR detecta movimiento → Ultrasónico confirma < 1,5 m → Rocío 5 s + foto E
 
 ---
 
-## 🧰 Componentes para replicar el hardware
+## Componentes para replicar el hardware
 
 | Componente | Cant. | Función |
 |---|---|---|
@@ -95,7 +95,7 @@ Detalle con costos en [`hardware/bom/`](hardware/bom/).
 
 ---
 
-## 🚀 Instalación y uso
+## Instalación y uso
 
 ### 1. Conectar el hardware
 | Elemento | GPIO | Pin físico |
@@ -136,14 +136,14 @@ Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`*
 
 ---
 
-## 📊 Estado del Proyecto
+## Estado del Proyecto
 - **Versión:** v3.0 — Avance 3, Prototipo IoT completo
 - **Última actualización:** 22 de noviembre de 2026
 - **Presentación:** 23 de noviembre de 2026
 
 ---
 
-## ✅ Checklist de Entrega (Avance 3)
+## Checklist de Entrega (Avance 3)
 
 ### Software
 - [x] Código Python comentado (`software/src/agrosafe.py`)
@@ -177,5 +177,5 @@ Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`*
 
 ---
 
-## 📄 Licencia
+## Licencia
 Proyecto desarrollado para el curso TEI201 — Facultad de Ingeniería y Ciencias — Universidad Adolfo Ibáñez.

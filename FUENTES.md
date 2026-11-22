@@ -2,7 +2,7 @@
 
 Proyecto: **AgroSafe** · TEI201 Taller de Diseño en Ingeniería · Grupo 6 · UAI
 
-> ⚠️ **Equipo:** revisar y completar las secciones marcadas con `[COMPLETAR]` antes de la presentación. Todos los integrantes deben poder explicar cada función de `agrosafe.py`.
+> **Equipo:** revisar y completar las secciones marcadas con `[COMPLETAR]` antes de la presentación. Todos los integrantes deben poder explicar cada función de `agrosafe.py`.
 
 ---
 
