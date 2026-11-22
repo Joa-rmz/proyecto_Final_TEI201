@@ -1,38 +1,19 @@
 # Bill of Materials (BOM)
 
-## Formato del Archivo
+Archivo: [`BOM.csv`](BOM.csv) (abre directo en Excel / Google Sheets).
 
-El archivo BOM debe incluir las siguientes columnas:
+> ⚠️ Completar proveedor y precios (CLP) de cada ítem y el **costo total**. La pauta penaliza un BOM sin costos.
 
-| Columna | Descripción | Ejemplo |
-|---------|-------------|---------|
-| Cantidad | Número de unidades | 1 |
-| Componente | Nombre descriptivo | ESP32 DevKit V1 |
-| Especificación | Detalles técnicos | 30 pines, WiFi+BT |
-| Fabricante | Marca del componente | Espressif |
-| Código/SKU | Identificador único | ESP32-WROOM-32 |
-| Proveedor | Tienda/distribuidor | AliExpress, MercadoLibre |
-| Precio Unitario | Costo por unidad (CLP) | $8,990 |
-| Precio Total | Cantidad × Precio | $8,990 |
-| Datasheet | Link a especificaciones | [URL] |
-
----
-
-## Archivos a Incluir
-
-- `bom_completo.xlsx` - Lista completa de materiales
-- `bom_completo.pdf` - Versión PDF para visualización
-- `datasheets/` - Carpeta con PDFs de componentes críticos
-
----
-
-## Presupuesto Total
-
-**Costo Total Estimado:** $[XXXXX] CLP
-
-### Desglose por Categoría
-- Microcontrolador: $X,XXX
-- Sensores: $X,XXX
-- Actuadores: $X,XXX
-- Estructura/Encapsulado: $X,XXX
-- Otros: $X,XXX
+| Cant. | Componente | Especificación | Precio unit. (CLP) | Total (CLP) |
+|---|---|---|---|---|
+| 1 | Raspberry Pi 3 Model B+ | 1 GB RAM, WiFi, 40 GPIO 3,3 V | [ ] | [ ] |
+| 1 | Sensor PIR HC-SR501 | 3–7 m, 110° | [ ] | [ ] |
+| 1 | Sensor ultrasónico HC-SR04 | 2–400 cm, ±3 mm | [ ] | [ ] |
+| 1 | LED 5 mm + resistencia 220 Ω | Indicador rociador | [ ] | [ ] |
+| 2 | Resistencias divisor de voltaje | ECHO 5 V → 3,3 V | [ ] | [ ] |
+| 1 | Protoboard + cables jumper | Conexiones | [ ] | [ ] |
+| 1 | Batería externa 20.000 mAh | 5 V USB | [ ] | [ ] |
+| 1 | Mini bomba de agua + relé 5 V | Actuador | [ ] | [ ] |
+| 1 | Encapsulado impreso 3D | PLA / PETG | [ ] | [ ] |
+| 1 | Tornillería | M3 | [ ] | [ ] |
+| | | | **TOTAL** | **[ ]** |

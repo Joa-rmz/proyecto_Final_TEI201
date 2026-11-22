@@ -1,0 +1,15 @@
+Cantidad,Componente,Especificacion,Fabricante/Modelo,Proveedor,Precio unitario (CLP),Precio total (CLP),Datasheet
+1,Raspberry Pi 3 Model B+,"BCM2837B0 1,4 GHz, 1 GB RAM, WiFi 2,4/5 GHz, 40 GPIO 3,3 V",Raspberry Pi Foundation,[COMPLETAR],[COMPLETAR],[COMPLETAR],https://www.raspberrypi.com/products/raspberry-pi-3-model-b-plus/
+1,Sensor PIR HC-SR501,"Alcance 3-7 m, ángulo 110°, 4,5-20 V, salida 3,3 V",HC-SR501,[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR]
+1,Sensor ultrasónico HC-SR04,"Rango 2-400 cm, precisión ±3 mm, 5 V, 15 mA",HC-SR04,[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR]
+1,LED 5 mm,Indicador del rociador,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Resistencia 220 Ω,1/4 W - limitación de corriente del LED,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+2,Resistencias divisor de voltaje,[COMPLETAR valores] - ECHO 5 V a 3,3 V,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Protoboard,[COMPLETAR puntos],Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Cables jumper (set),Macho-macho / macho-hembra,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Batería externa,"20.000 mAh, salida 5 V USB",[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Mini bomba de agua,[COMPLETAR voltaje/caudal],[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Módulo relé,"1 canal, 5 V, entrada compatible 3,3 V",[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Encapsulado impreso 3D,Base fija + torreta - PLA (prototipo) / PETG (exterior),Impresión propia,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+1,Tornillería,[COMPLETAR: M3 x ...],Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
+,,,,,TOTAL,[COMPLETAR],
