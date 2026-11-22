@@ -4,7 +4,7 @@ Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 
 | Pieza | Dimensiones | Función |
 |---|---|---|
-| Base fija | 132 × 132 × 203 mm | Aloja Raspberry Pi 3 B+ (85 × 56 mm), protoboard, batería y cableado. Tapa removible para mantenimiento. |
+| Base fija | 132 × 132 × 203 mm | Aloja Raspberry Pi 4 Model B (85 × 56 mm), protoboard, batería y cableado. Tapa removible para mantenimiento. |
 | Torreta giratoria | 59 × 81 × 88 mm | Sensores PIR y HC-SR04 arriba (campo de visión despejado), brazo y boquilla. Gira con servomotor. |
 
 **Software:** Autodesk Fusion 360 · **Unidades:** mm · **Escala:** 1:1
@@ -20,7 +20,7 @@ Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 
 | Componente | Volumen de referencia (mm) | ¿Modelado? |
 |---|---|---|
-| Raspberry Pi 3 B+ | 85 × 56 × 17 | [ ] |
+| Raspberry Pi 4 Model B | 85 × 56 × 17 | [ ] |
 | Protoboard | `[COMPLETAR]` | [ ] |
 | Batería 20.000 mAh | `[COMPLETAR]` | [ ] |
 | Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) | [ ] |
