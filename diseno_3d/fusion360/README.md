@@ -17,7 +17,7 @@ Agrosafe_Ensamble_Completo
 ├── Base_Fija (132 × 132 × 203 mm)
 ├── Tapa_Removible_Mantenimiento
 ├── Torreta_Giratoria (59 × 81 × 88 mm)
-├── Raspberry_Pi_3B+ (85 × 56 × 17 mm)
+├── Raspberry_Pi_4B (85 × 56 × 17 mm)
 ├── Protoboard
 ├── Bateria_20000mAh
 ├── Sensor_PIR_HC-SR501
