@@ -1,462 +1,500 @@
 """
 AgroSafe - Protección inteligente de cultivos (TEI201 - Grupo 6)
+Programa del dispositivo (Raspberry Pi 4 Model B).
 
-Programa principal que corre en la Raspberry Pi 4 Model B:
-  1. CAPTURA   : PIR HC-SR501 detecta movimiento; HC-SR04 confirma distancia;
-                 la ESP32-CAM toma una foto del animal por WiFi.
-  2. ACTÚA     : si el objetivo está a < 150 cm, activa el rociador (LED/relé) 5 s.
-  3. ALMACENA  : cada evento se guarda en data/eventos.csv (persiste al reiniciar).
-  4. VISUALIZA : dashboard Flask en http://<IP-de-la-Raspberry>:5000
-  5. INFORMA   : estadísticas del día, actividad por hora y alerta de alta actividad.
+Ciclo: PIR detecta movimiento -> HC-SR04 confirma distancia (15-50 cm, 3 lecturas)
+-> 2 capturas de la cámara con reconocimiento de la figura objetivo
+-> se vuelve a verificar la distancia -> relé de la bomba 2 s -> pausa 5 s.
 
-Ejecutar:  python3 agrosafe.py
+[Avance 3] Cada evento se guarda en data/eventos.csv (persiste al reiniciar) y el
+dashboard muestra indicadores calculados a partir del histórico.
+
+Requiere el módulo agrosafe_integracion_prueba_v2.py (capturar, detectar_estrella)
+en la misma carpeta. Ejecutar:  python3 agrosafe.py  ->  http://<IP-Raspberry>:5000
 """
-
 import csv
 import os
-import time
 import threading
-import urllib.request
-from collections import Counter
+import time
+from collections import Counter, deque
 from datetime import datetime, timedelta
 
-import RPi.GPIO as GPIO
-from flask import Flask, send_file, jsonify
+from flask import Flask, jsonify, render_template_string, send_file
+from gpiozero import DigitalOutputDevice, MotionSensor, DistanceSensor
+from werkzeug.serving import make_server
+
+from agrosafe_integracion_prueba_v2 import capturar, detectar_estrella
+
+
+app = Flask(__name__)
+lock = threading.Lock()
+eventos = deque(maxlen=50)
+
+estado = {
+    "fase": "Iniciando",
+    "distancia": None,
+    "movimiento": False,
+    "rele": False,
+    "captura": "Sin analizar",
+    "actualizado": "",
+}
+
+
+def actualizar(**datos):
+    with lock:
+        estado.update(datos)
+        estado["actualizado"] = datetime.now().strftime("%H:%M:%S")
+
 
 # ---------------------------------------------------------------------------
-# Configuración
+# [Avance 3] Repositorio de datos: CSV persistente + histórico para indicadores
 # ---------------------------------------------------------------------------
-
-# Pines físicos de la Raspberry Pi (numeración BOARD)
-PIR_PIN = 11       # Salida del sensor PIR (GPIO 17)
-LED_PIN = 12       # LED / relé de la bomba, con resistencia de 220 ohm (GPIO 18)
-TRIG_PIN = 16      # Trigger del sensor ultrasónico (GPIO 23)
-ECHO_PIN = 18      # Echo del ultrasónico mediante divisor de tensión (GPIO 24)
-
-# Parámetros del sistema
-DISTANCIA_MAXIMA_CM = 150   # Solo se rocía si el objetivo está más cerca que esto
-TIEMPO_ACTIVACION_S = 5     # Duración del rocío (ahorra agua)
-TIEMPO_REPOSO_S = 8         # Enfriamiento tras una activación
-TIEMPO_REARME_S = 1         # El PIR debe estar 1 s en reposo antes de re-detectar
-INTERVALO_BEACON_S = 5      # Cada 5 s se registra un "reposo" (prueba que el sistema está vivo)
-MAX_EVENTOS = 30            # Eventos mostrados en la tabla del dashboard
-
-# Generación de información
-UMBRAL_ALERTA_HORA = 5      # >= 5 activaciones en la última hora -> alerta de alta actividad
-
-# Almacenamiento persistente
 CARPETA_DATOS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")
 ARCHIVO_CSV = os.path.join(CARPETA_DATOS, "eventos.csv")
-COLUMNAS_CSV = ["fecha", "hora", "estado", "distancia_cm", "foto"]
-FOTO_PATH = "/tmp/agrosafe_ultima.jpg"
-
-# Cámara ESP32-CAM (en la misma red WiFi). Su IP aparece en el Monitor Serie al encenderla.
-# Se puede cambiar sin editar el código:  ESP32_CAM_URL=http://192.168.1.50/capture python3 agrosafe.py
-ESP32_CAM_URL = os.environ.get("ESP32_CAM_URL", "http://192.168.1.50/capture")
-
-# ---------------------------------------------------------------------------
-# Cámara: ESP32-CAM por WiFi (principal) o cámara CSI de la Raspberry (respaldo).
-# Si ninguna responde, el sistema sigue funcionando sin foto.
-# ---------------------------------------------------------------------------
-camara = None
-
-try:
-    from picamera2 import Picamera2
-
-    camara = Picamera2()
-    camara.configure(camara.create_still_configuration())
-    camara.start()
-    print("Cámara detectada.")
-
-except Exception as e:
-    camara = None
-    print(f"Sin cámara: el sistema funciona igual. Detalle: {e}")
-
-
-def foto_esp32cam():
-    """Pide una foto a la ESP32-CAM (endpoint /capture) y la guarda en FOTO_PATH."""
-    if not ESP32_CAM_URL:
-        return False
-
-    try:
-        with urllib.request.urlopen(ESP32_CAM_URL, timeout=3) as respuesta:
-            imagen = respuesta.read()
-
-        with open(FOTO_PATH, "wb") as f:
-            f.write(imagen)
-        return True
-
-    except Exception as e:
-        print("ESP32-CAM no responde:", e)
-        return False
-
-
-def tomar_foto():
-    """Toma una fotografía: primero con la ESP32-CAM y, si falla, con la cámara CSI."""
-    if foto_esp32cam():
-        return True
-
-    if camara is None:
-        return False
-
-    try:
-        camara.capture_file(FOTO_PATH)
-        return True
-
-    except Exception as e:
-        print("Error al tomar foto:", e)
-        return False
-
-
-# ---------------------------------------------------------------------------
-# GPIO y sensores
-# ---------------------------------------------------------------------------
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
-GPIO.setup(PIR_PIN, GPIO.IN)
-GPIO.setup(LED_PIN, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(TRIG_PIN, GPIO.OUT, initial=GPIO.LOW)
-GPIO.setup(ECHO_PIN, GPIO.IN)
-
-
-def medir_distancia_cm():
-    """Mide la distancia con el HC-SR04. Devuelve -1 si no hay eco."""
-    GPIO.output(TRIG_PIN, GPIO.HIGH)
-    time.sleep(0.00001)
-    GPIO.output(TRIG_PIN, GPIO.LOW)
-
-    limite = time.monotonic() + 0.05
-    inicio = time.monotonic()
-
-    while GPIO.input(ECHO_PIN) == 0:
-        inicio = time.monotonic()
-
-        if inicio > limite:
-            return -1
-
-    fin = time.monotonic()
-
-    while GPIO.input(ECHO_PIN) == 1:
-        fin = time.monotonic()
-
-        if fin > limite + 0.05:
-            return -1
-
-    # Velocidad del sonido = 34300 cm/s; se divide por 2 (ida y vuelta)
-    return round((fin - inicio) * 34300 / 2, 1)
-
-
-# ---------------------------------------------------------------------------
-# Registro de eventos: memoria (para el dashboard) + CSV (persistente)
-# ---------------------------------------------------------------------------
-eventos = []                 # Últimos eventos, el más reciente primero
-historico = []               # Eventos "activado"/"descartado" (para estadísticas)
-lock = threading.Lock()
+COLUMNAS_CSV = ["fecha", "hora", "tipo", "mensaje", "distancia_cm"]
+UMBRAL_ALERTA_HORA = 5      # >= 5 activaciones en la última hora -> alerta
+historico = []              # eventos de tipo deteccion / activacion / descarte
 
 
 def iniciar_csv():
-    """Crea data/eventos.csv con encabezado si no existe y carga el histórico."""
+    """Crea data/eventos.csv con encabezado o recarga el histórico si ya existe."""
     os.makedirs(CARPETA_DATOS, exist_ok=True)
-
     if not os.path.exists(ARCHIVO_CSV):
         with open(ARCHIVO_CSV, "w", newline="") as f:
             csv.writer(f).writerow(COLUMNAS_CSV)
         return
-
-    # Si ya existía, se cargan las detecciones previas para no perder estadísticas
     with open(ARCHIVO_CSV, newline="") as f:
         for fila in csv.DictReader(f):
-            if fila["estado"] in ("activado", "descartado"):
+            if fila["tipo"] in ("deteccion", "activacion", "descarte"):
                 historico.append(fila)
 
 
-def registrar(estado, distancia, foto=False):
-    """Registra un evento en memoria y lo agrega al CSV."""
+def registrar(mensaje, tipo="info"):
+    """Registra un evento en el historial de la sesión y lo agrega al CSV.
+    tipo: info | deteccion | activacion | descarte | error"""
     ahora = datetime.now()
-    evento = {
-        "fecha": ahora.strftime("%Y-%m-%d"),
-        "hora": ahora.strftime("%H:%M:%S"),
-        "estado": estado,
-        "distancia_cm": distancia,
-        "foto": foto,
-    }
-
+    hora = ahora.strftime("%H:%M:%S")
     with lock:
-        eventos.insert(0, evento)
-        del eventos[MAX_EVENTOS:]
+        eventos.appendleft({"hora": hora, "mensaje": mensaje})
+        fila = {
+            "fecha": ahora.strftime("%Y-%m-%d"),
+            "hora": hora,
+            "tipo": tipo,
+            "mensaje": mensaje,
+            "distancia_cm": estado.get("distancia"),
+        }
+        if tipo in ("deteccion", "activacion", "descarte"):
+            historico.append(fila)
+        # Se escribe de inmediato para que el dato sobreviva a un corte de energía
+        try:
+            with open(ARCHIVO_CSV, "a", newline="") as f:
+                csv.DictWriter(f, fieldnames=COLUMNAS_CSV).writerow(fila)
+        except OSError as error:
+            print(f"No se pudo guardar en CSV: {error}", flush=True)
+    print(f"{hora} {mensaje}", flush=True)
 
-        if estado in ("activado", "descartado"):
-            historico.append(evento)
 
-        # Se escribe inmediatamente para que el dato sobreviva a un corte de energía
-        with open(ARCHIVO_CSV, "a", newline="") as f:
-            csv.DictWriter(f, fieldnames=COLUMNAS_CSV).writerow(evento)
-
-    print(evento)
-
-
-# ---------------------------------------------------------------------------
-# Generación de información a partir de los datos
-# ---------------------------------------------------------------------------
 def calcular_estadisticas():
-    """Transforma los eventos crudos en indicadores para el agricultor."""
+    """[Avance 3] Transforma el histórico en indicadores para el agricultor."""
     hoy = datetime.now().strftime("%Y-%m-%d")
     hace_una_hora = datetime.now() - timedelta(hours=1)
-
     with lock:
-        datos = list(historico)
-
-    del_dia = [e for e in datos if e["fecha"] == hoy]
-    activados_hoy = [e for e in del_dia if e["estado"] == "activado"]
-    descartados_hoy = [e for e in del_dia if e["estado"] == "descartado"]
-
+        datos = [e for e in historico if e["fecha"] == hoy]
+    detecciones = [e for e in datos if e["tipo"] == "deteccion"]
+    activaciones = [e for e in datos if e["tipo"] == "activacion"]
+    descartes = [e for e in datos if e["tipo"] == "descarte"]
     ultima_hora = [
-        e for e in activados_hoy
+        e for e in activaciones
         if datetime.strptime(f"{e['fecha']} {e['hora']}", "%Y-%m-%d %H:%M:%S") >= hace_una_hora
     ]
-
-    # Activaciones por hora del día (0-23): muestra en qué horario hay más conejos
-    por_hora = Counter(int(e["hora"][:2]) for e in activados_hoy)
-
-    distancias = [float(e["distancia_cm"]) for e in activados_hoy]
-    total_detecciones = len(del_dia)
-
+    por_hora = Counter(int(e["hora"][:2]) for e in activaciones)
     return {
-        "activaciones_hoy": len(activados_hoy),
-        "descartes_hoy": len(descartados_hoy),
-        # % de detecciones del PIR que el ultrasónico confirmó como cercanas
-        "tasa_confirmacion": round(100 * len(activados_hoy) / total_detecciones, 1) if total_detecciones else 0,
-        "distancia_promedio": round(sum(distancias) / len(distancias), 1) if distancias else 0,
-        # Agua usada estimada = activaciones x segundos de rocío
-        "segundos_rocio_hoy": len(activados_hoy) * TIEMPO_ACTIVACION_S,
+        "detecciones_hoy": len(detecciones),
+        "activaciones_hoy": len(activaciones),
+        "descartes_hoy": len(descartes),
+        # % de movimientos detectados que terminaron en activación de la bomba
+        "tasa_confirmacion": round(100 * len(activaciones) / len(detecciones), 1) if detecciones else 0,
+        "segundos_bomba_hoy": len(activaciones) * 2,
         "activaciones_ultima_hora": len(ultima_hora),
         "alerta": len(ultima_hora) >= UMBRAL_ALERTA_HORA,
         "hora_peak": por_hora.most_common(1)[0][0] if por_hora else None,
         "por_hora": [por_hora.get(h, 0) for h in range(24)],
-        "historico_total": len([e for e in datos if e["estado"] == "activado"]),
     }
 
 
-# ---------------------------------------------------------------------------
-# Lógica principal: sensores y actuador
-# ---------------------------------------------------------------------------
-def bucle_sensores():
-    ultimo_beacon = 0
-    preparado = False
-    inactivo_desde = None
-
-    while True:
-        ahora = time.monotonic()
-
-        # Registro periódico de "reposo" para evidenciar captura continua
-        if ahora - ultimo_beacon >= INTERVALO_BEACON_S:
-            registrar("reposo", medir_distancia_cm())
-            ultimo_beacon = ahora
-
-        movimiento = bool(GPIO.input(PIR_PIN))
-
-        if not movimiento:
-            if inactivo_desde is None:
-                inactivo_desde = time.monotonic()
-
-            elif time.monotonic() - inactivo_desde >= TIEMPO_REARME_S:
-                preparado = True
-
-        else:
-            inactivo_desde = None
-
-        if movimiento and preparado:
-            # Consumir la detección para evitar activaciones repetidas
-            # mientras la señal del PIR permanezca activa.
-            preparado = False
-            distancia = medir_distancia_cm()
-
-            if 0 < distancia < DISTANCIA_MAXIMA_CM:
-                GPIO.output(LED_PIN, GPIO.HIGH)
-
-                try:
-                    foto = tomar_foto()
-                    registrar("activado", distancia, foto)
-                    time.sleep(TIEMPO_ACTIVACION_S)
-
-                finally:
-                    GPIO.output(LED_PIN, GPIO.LOW)
-
-                time.sleep(TIEMPO_REPOSO_S)
-
-            else:
-                registrar("descartado", distancia)
-                time.sleep(1)
-
-        time.sleep(0.1)
-
-
-# ---------------------------------------------------------------------------
-# Dashboard web (Flask)
-# ---------------------------------------------------------------------------
-app = Flask(__name__)
-
-COLORES = {
-    "activado": "#e74c3c",
-    "descartado": "#f39c12",
-    "reposo": "#27ae60",
-}
-
-
-def grafico_por_hora(por_hora):
-    """Gráfico de barras (HTML/CSS puro, sin internet) de activaciones por hora."""
-    maximo = max(por_hora) or 1
-    barras = ""
-
-    for hora, cantidad in enumerate(por_hora):
-        alto = int(100 * cantidad / maximo)
-        barras += (
-            f"<div class='barra' title='{hora:02d}:00 - {cantidad} activaciones'>"
-            f"<div style='height:{alto}%'></div><span>{hora}</span></div>"
-        )
-
-    return f"<div class='grafico'>{barras}</div>"
-
-
-@app.route("/")
-def dashboard():
-    with lock:
-        lista = list(eventos)
-
-    est = calcular_estadisticas()
-    ultimo = lista[0] if lista else None
-
-    filas = ""
-
-    for evento in lista:
-        color = COLORES.get(evento["estado"], "#888")
-
-        filas += (
-            f"<tr><td>{evento['hora']}</td>"
-            f"<td style='color:{color};font-weight:bold'>"
-            f"{evento['estado']}</td>"
-            f"<td>{evento['distancia_cm']} cm</td></tr>"
-        )
-
-    estado_html = "Esperando datos..."
-
-    if ultimo:
-        color = COLORES.get(ultimo["estado"], "#888")
-
-        estado_html = (
-            f"<span style='color:{color}'>"
-            f"{ultimo['estado'].upper()}</span>"
-            f" &middot; {ultimo['distancia_cm']} cm"
-            f" &middot; {ultimo['hora']}"
-        )
-
-    alerta_html = ""
-
-    if est["alerta"]:
-        alerta_html = (
-            "<div class='alerta'>ALTA ACTIVIDAD: "
-            f"{est['activaciones_ultima_hora']} activaciones en la última hora. "
-            "Revisar el predio y el nivel del estanque de agua.</div>"
-        )
-
-    hora_peak = f"{est['hora_peak']:02d}:00" if est["hora_peak"] is not None else "—"
-
-    foto_html = ""
-
-    if camara is not None or ESP32_CAM_URL:
-        foto_html = (
-            "<h2>Última foto</h2>"
-            f"<img src='/foto?t={time.time()}' style='max-width:100%'>"
-        )
-
-    return f"""<!doctype html>
-<html>
+HTML = """
+<!doctype html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="refresh" content="2">
-<title>AGROSAFE</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AgroSafe</title>
 <style>
-body {{ font-family: sans-serif; max-width: 760px; margin: auto; padding: 16px; }}
-table {{ width: 100%; border-collapse: collapse; }}
-td {{ padding: 6px; border-bottom: 1px solid #ddd; }}
-.kpis {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; }}
-.kpi {{ background: #f4f6f4; border-radius: 8px; padding: 10px; }}
-.kpi b {{ display: block; font-size: 1.6em; }}
-.alerta {{ background: #fdecea; color: #b03a2e; padding: 12px; border-radius: 8px; font-weight: bold; }}
-.grafico {{ display: flex; align-items: flex-end; height: 140px; gap: 2px; }}
-.barra {{ flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; text-align: center; font-size: 10px; }}
-.barra div {{ background: #e74c3c; min-height: 1px; }}
+body{
+    font-family:system-ui;
+    background:#eef3ef;
+    color:#183126;
+    max-width:850px;
+    margin:auto;
+    padding:24px;
+}
+h1{margin-bottom:4px}
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:12px;
+    margin:20px 0;
+}
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+}
+.label{font-size:14px;color:#52645b}
+.value{font-size:22px;font-weight:600;margin-top:8px}
+table{width:100%;border-collapse:collapse;background:white}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #ddd}
+#conexion{font-weight:bold}
 </style>
 </head>
 <body>
-<h1>AGROSAFE</h1>
-{alerta_html}
-<h2>Estado actual</h2>
-<p style="font-size:1.3em">{estado_html}</p>
+<h1>AgroSafe</h1>
+<p id="conexion">Conectando...</p>
 
-<h2>Indicadores de hoy</h2>
-<div class="kpis">
-  <div class="kpi"><b>{est['activaciones_hoy']}</b>rocíos activados</div>
-  <div class="kpi"><b>{est['descartes_hoy']}</b>detecciones descartadas (&gt; {DISTANCIA_MAXIMA_CM} cm)</div>
-  <div class="kpi"><b>{est['tasa_confirmacion']} %</b>detecciones confirmadas</div>
-  <div class="kpi"><b>{hora_peak}</b>hora de mayor actividad</div>
-  <div class="kpi"><b>{est['distancia_promedio']} cm</b>distancia promedio</div>
-  <div class="kpi"><b>{est['segundos_rocio_hoy']} s</b>tiempo total de rocío</div>
+<div class="grid">
+    <div class="card">
+        <div class="label">Estado</div>
+        <div class="value" id="fase">—</div>
+    </div>
+    <div class="card">
+        <div class="label">Última distancia</div>
+        <div class="value" id="distancia">—</div>
+    </div>
+    <div class="card">
+        <div class="label">Detección de movimiento</div>
+        <div class="value" id="movimiento">—</div>
+    </div>
+    <div class="card">
+        <div class="label">Bomba de agua</div>
+        <div class="value" id="rele">—</div>
+    </div>
+    <div class="card">
+        <div class="label">Último reconocimiento</div>
+        <div class="value" id="captura">—</div>
+    </div>
 </div>
 
+<div id="alerta" style="display:none;background:#fdecea;color:#b03a2e;padding:14px;border-radius:12px;font-weight:600"></div>
+<h2>Indicadores de hoy</h2>
+<div class="grid">
+    <div class="card"><div class="label">Movimientos detectados</div><div class="value" id="i_det">—</div></div>
+    <div class="card"><div class="label">Activaciones de la bomba</div><div class="value" id="i_act">—</div></div>
+    <div class="card"><div class="label">Detecciones descartadas</div><div class="value" id="i_des">—</div></div>
+    <div class="card"><div class="label">% confirmadas</div><div class="value" id="i_tasa">—</div></div>
+    <div class="card"><div class="label">Hora de mayor actividad</div><div class="value" id="i_peak">—</div></div>
+    <div class="card"><div class="label">Tiempo total de bomba</div><div class="value" id="i_seg">—</div></div>
+</div>
 <h2>Activaciones por hora (hoy)</h2>
-{grafico_por_hora(est['por_hora'])}
-<p>Total histórico de activaciones: {est['historico_total']} &middot;
-<a href="/datos.csv">Descargar datos (CSV)</a></p>
+<div id="grafico" style="display:flex;align-items:flex-end;height:120px;gap:2px;background:white;padding:10px;border-radius:12px"></div>
+<p><a href="/datos.csv">Descargar historial completo (CSV)</a></p>
 
-{foto_html}
-<h2>Últimos eventos</h2>
-<table>{filas}</table>
+<p id="actualizado"></p>
+<h2>Historial de esta sesión</h2>
+<table>
+    <thead>
+        <tr><th>Hora</th><th>Evento</th></tr>
+    </thead>
+    <tbody id="historial"></tbody>
+</table>
+
+<script>
+const texto=(id,valor)=>{
+    document.getElementById(id).textContent=valor;
+};
+
+async function refrescar(){
+    try{
+        const r=await fetch('/api/estado',{
+            cache:'no-store',
+            signal:AbortSignal.timeout(4000)
+        });
+
+        if(!r.ok) throw new Error('Sin respuesta');
+        const d=await r.json();
+
+        texto('conexion','● Panel conectado');
+        document.getElementById('conexion').style.color='#187044';
+        texto('fase',d.fase);
+        texto(
+            'distancia',
+            d.distancia===null?'Sin lectura':d.distancia+' cm'
+        );
+        texto(
+            'movimiento',
+            d.movimiento?'Movimiento':'Sin movimiento'
+        );
+        texto('rele',d.rele?'ENCENDIDA':'Apagada');
+
+        // Cambio de texto únicamente; no cambia el detector.
+        texto(
+            'captura',
+            d.captura
+                .replace(/ESTRELLA/g,'CONEJO')
+                .replace(/Estrella/g,'Conejo')
+                .replace(/estrella/g,'conejo')
+        );
+
+        texto(
+            'actualizado',
+            'Última actualización del control: '+d.actualizado
+        );
+
+        // [Avance 3] indicadores calculados desde el CSV
+        const s=d.estadisticas;
+        texto('i_det',s.detecciones_hoy);
+        texto('i_act',s.activaciones_hoy);
+        texto('i_des',s.descartes_hoy);
+        texto('i_tasa',s.tasa_confirmacion+' %');
+        texto('i_peak',s.hora_peak===null?'—':String(s.hora_peak).padStart(2,'0')+':00');
+        texto('i_seg',s.segundos_bomba_hoy+' s');
+        const al=document.getElementById('alerta');
+        al.style.display=s.alerta?'block':'none';
+        al.textContent='ALTA ACTIVIDAD: '+s.activaciones_ultima_hora+' activaciones en la última hora. Revisar el predio y el estanque de agua.';
+        const g=document.getElementById('grafico');
+        g.replaceChildren();
+        const max=Math.max(1,...s.por_hora);
+        s.por_hora.forEach((n,h)=>{
+            const b=document.createElement('div');
+            b.style.cssText='flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;font-size:10px;height:100%';
+            const barra=document.createElement('div');
+            barra.style.cssText='width:100%;background:#2f7a4c;min-height:1px;height:'+(100*n/max)+'%';
+            barra.title=h+':00 - '+n+' activaciones';
+            const lab=document.createElement('span'); lab.textContent=h;
+            b.append(barra,lab); g.appendChild(b);
+        });
+
+        const tabla=document.getElementById('historial');
+        tabla.replaceChildren();
+
+        for(const e of d.eventos){
+            const fila=document.createElement('tr');
+            for(const valor of [e.hora,e.mensaje]){
+                const celda=document.createElement('td');
+                celda.textContent=valor;
+                fila.appendChild(celda);
+            }
+            tabla.appendChild(fila);
+        }
+    }catch(e){
+        texto(
+            'conexion',
+            '● Sin conexión: no se puede confirmar el estado'
+        );
+        document.getElementById('conexion').style.color='#b33232';
+
+        for(const id of [
+            'fase','distancia','movimiento','rele','captura'
+        ]){
+            texto(id,'Sin datos actuales');
+        }
+    }finally{
+        setTimeout(refrescar,1000);
+    }
+}
+
+refrescar();
+</script>
 </body>
-</html>"""
+</html>
+"""
 
 
-@app.route("/api/estadisticas")
-def api_estadisticas():
-    """Indicadores en formato JSON (útil para pruebas y análisis)."""
-    return jsonify(calcular_estadisticas())
+@app.get("/")
+def inicio():
+    return render_template_string(HTML)
 
 
-@app.route("/datos.csv")
+@app.get("/api/estado")
+def datos():
+    with lock:
+        contenido = dict(estado)
+        contenido["eventos"] = list(eventos)
+    contenido["estadisticas"] = calcular_estadisticas()
+
+    respuesta = jsonify(contenido)
+    respuesta.headers["Cache-Control"] = "no-store"
+    return respuesta
+
+
+@app.get("/datos.csv")
 def descargar_csv():
-    """Descarga el histórico completo para analizarlo en Excel/R."""
+    """[Avance 3] Descarga del histórico completo para análisis en Excel/R."""
     return send_file(ARCHIVO_CSV, mimetype="text/csv", as_attachment=True,
                      download_name="agrosafe_eventos.csv")
 
 
-@app.route("/foto")
-def foto():
-    try:
-        return send_file(FOTO_PATH, mimetype="image/jpeg")
+def leer_sensores(pir, sensor):
+    cm = float(sensor.distance * 100)
+    if not 0 < cm < 200:
+        cm = None
 
-    except Exception:
-        return "Sin foto aún", 404
+    actualizar(
+        distancia=round(cm, 1) if cm is not None else None,
+        movimiento=bool(pir.motion_detected),
+    )
+    return cm
 
 
-# ---------------------------------------------------------------------------
-# Inicio del sistema
-# ---------------------------------------------------------------------------
+def comprobar_distancia(pir, sensor):
+    lecturas = []
+    for _ in range(3):
+        lecturas.append(leer_sensores(pir, sensor))
+        time.sleep(0.2)
+
+    return all(
+        cm is not None and 15 <= cm <= 50
+        for cm in lecturas
+    )
+
+
+def esperar(segundos, pir, sensor):
+    fin = time.monotonic() + segundos
+    while time.monotonic() < fin:
+        leer_sensores(pir, sensor)
+        time.sleep(0.2)
+
+
+def esperar_rearme(pir, sensor):
+    actualizar(fase="Esperando que termine el movimiento")
+    while True:
+        leer_sensores(pir, sensor)
+        if not pir.motion_detected:
+            return
+        time.sleep(0.2)
+
+
+def evaluar(pir, sensor):
+    actualizar(
+        fase="Comprobando distancia",
+        captura="Sin analizar",
+    )
+
+    if not comprobar_distancia(pir, sensor):
+        registrar("Distancia fuera del rango. Sin activación.", "descarte")
+        return False
+
+    for numero in (1, 2):
+        actualizar(fase=f"Analizando captura {numero}/2")
+        imagen = capturar()
+        estrella = detectar_estrella(imagen)
+        resultado = "Estrella" if estrella else "Sin estrella"
+
+        actualizar(captura=f"{numero}/2: {resultado}")
+        registrar(f"Captura {numero}/2: {resultado}")
+
+        if not estrella:
+            registrar("Figura descartada. Sin activación.", "descarte")
+            return False
+
+        if numero == 1:
+            time.sleep(0.5)
+
+    actualizar(fase="Verificando distancia final")
+    if not comprobar_distancia(pir, sensor):
+        registrar("La distancia cambió. Sin activación.", "descarte")
+        return False
+
+    return True
+
+
+def controlar(rele, pir, sensor):
+    registrar("Control iniciado. Relé apagado.")
+    esperar(2, pir, sensor)
+    esperar_rearme(pir, sensor)
+
+    while True:
+        actualizar(fase="Esperando movimiento")
+        leer_sensores(pir, sensor)
+
+        if not pir.motion_detected:
+            time.sleep(0.2)
+            continue
+
+        registrar("Movimiento detectado.", "deteccion")
+
+        try:
+            if evaluar(pir, sensor):
+                actualizar(fase="Activando bomba")
+                try:
+                    rele.on()
+                    actualizar(rele=True)
+                    registrar(
+                        "Estrella confirmada. Pulso de 2 segundos.",
+                        "activacion",
+                    )
+                    time.sleep(2)
+                finally:
+                    rele.off()
+                    actualizar(rele=False)
+                    registrar("Relé apagado.")
+
+        except Exception as error:
+            rele.off()
+            actualizar(
+                rele=False,
+                fase="Error",
+                captura="No confirmado",
+            )
+            registrar(f"Intento cancelado: {error}", "error")
+
+        finally:
+            rele.off()
+            actualizar(rele=False)
+
+        actualizar(fase="Pausa de 5 segundos")
+        esperar(5, pir, sensor)
+        esperar_rearme(pir, sensor)
+
+
+def main():
+    iniciar_csv()   # [Avance 3]
+    with DigitalOutputDevice(
+        27,
+        active_high=True,
+        initial_value=False,
+    ) as rele:
+        try:
+            with MotionSensor(17) as pir, DistanceSensor(
+                echo=24,
+                trigger=23,
+                max_distance=2,
+            ) as sensor:
+                servidor = make_server(
+                    "0.0.0.0",
+                    5000,
+                    app,
+                    threaded=True,
+                )
+                hilo = threading.Thread(
+                    target=servidor.serve_forever,
+                    daemon=True,
+                )
+                hilo.start()
+
+                try:
+                    controlar(rele, pir, sensor)
+                finally:
+                    rele.off()
+                    actualizar(rele=False, fase="Detenido")
+                    servidor.shutdown()
+                    servidor.server_close()
+
+        finally:
+            rele.off()
+
+
 if __name__ == "__main__":
     try:
-        iniciar_csv()
-
-        hilo_sensores = threading.Thread(target=bucle_sensores, daemon=True)
-        hilo_sensores.start()
-
-        app.run(host="0.0.0.0", port=5000)
-
+        main()
     except KeyboardInterrupt:
-        print("Cierre solicitado por el usuario.")
-
-    finally:
-        GPIO.output(LED_PIN, GPIO.LOW)
-        GPIO.cleanup()
-
-        if camara is not None:
-            camara.stop()
+        print("Programa detenido.", flush=True)
