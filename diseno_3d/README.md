@@ -25,6 +25,7 @@ Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 | Batería 20.000 mAh | `[COMPLETAR]` | [ ] |
 | Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) | [ ] |
 | Sensor HC-SR04 | 45 × 20 × 15 | [ ] |
+| ESP32-CAM | 27 × 40 × 12 (con cámara) | [ ] |
 | Mini bomba + relé | `[COMPLETAR]` | [ ] |
 | Servomotor | `[COMPLETAR]` | [ ] |
 | Tornillería | M3 | [ ] |
