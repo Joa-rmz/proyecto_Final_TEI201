@@ -1,6 +1,6 @@
 # Planos Técnicos
 
-Generados desde el ensamble `AgroSafe_montaje_completo_con_componentes.step`. Formato A3, unidades mm, proyección ISO E (primer diedro), cajetín con proyecto, pieza, escala, material, fecha, versión e integrantes.
+Generados desde el ensamble `fusion360/Montaje con componentes.step`. Formato A3, unidades mm, proyección ISO E (primer diedro), cajetín con proyecto, pieza, escala, material, fecha, versión e integrantes.
 
 | Archivo | Contenido |
 |---|---|
