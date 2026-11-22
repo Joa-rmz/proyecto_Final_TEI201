@@ -2,7 +2,7 @@
 
 Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disuasoria no letal (rocío de agua). Una Raspberry Pi 4 Model B procesa las señales de dos sensores, controla el actuador y pide una foto a una ESP32-CAM por WiFi.
 
-## 📁 Carpetas
+## Carpetas
 - `esquemas/` — Esquemático del circuito
 - `bom/` — Lista de materiales con costos
 - `fotos/` — Fotografías del prototipo (mínimo 3 ángulos)
@@ -50,10 +50,10 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 - `[COMPLETAR: tipo de fijación — tornillos M3 / clips — y tiempo para abrir el equipo]`
 
 ## Precauciones
-- ⚠️ No conectar ECHO directo a un GPIO (5 V dañan la Raspberry).
-- ⚠️ No alimentar la bomba desde un GPIO; usar relé y fuente adecuada.
-- ⚠️ Mantener la electrónica aislada del agua del rociador (en especial el lente de la ESP32-CAM).
-- ⚠️ La ESP32-CAM necesita ≥ 500 mA a 5 V: con una fuente débil se reinicia al transmitir.
+- No conectar ECHO directo a un GPIO (5 V dañan la Raspberry).
+- No alimentar la bomba desde un GPIO; usar relé y fuente adecuada.
+- Mantener la electrónica aislada del agua del rociador (en especial el lente de la ESP32-CAM).
+- La ESP32-CAM necesita ≥ 500 mA a 5 V: con una fuente débil se reinicia al transmitir.
 
 ## Especificaciones técnicas
 **Alimentación:** 5 V / 3 A por USB-C (batería 20.000 mAh)
