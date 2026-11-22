@@ -1,6 +1,6 @@
 # Hardware - AgroSafe
 
-Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disuasoria no letal (rocío de agua). Una Raspberry Pi 3 B+ procesa las señales de dos sensores y controla el actuador.
+Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disuasoria no letal (rocío de agua). Una Raspberry Pi 4 Model B procesa las señales de dos sensores y controla el actuador.
 
 ## 📁 Carpetas
 - `esquemas/` — Esquemático del circuito
@@ -13,12 +13,12 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 
 | Componente | Por qué se eligió |
 |---|---|
-| **Raspberry Pi 3 B+** | WiFi integrado para el dashboard, corre Python + Flask y guarda el CSV en la microSD. Permite integrar cámara (CSI). En el Avance 2 reemplazó a ESP32 + Raspberry, simplificando todo a un solo programa. |
+| **Raspberry Pi 4 Model B** | WiFi integrado para el dashboard, corre Python + Flask y guarda el CSV en la microSD. Permite integrar cámara (CSI). Procesador de 4 núcleos a 1,5 GHz: corre sensores, servidor web y cámara en paralelo sin perder lecturas. Reemplazó a ESP32 + Raspberry, simplificando todo a un solo programa. |
 | **PIR HC-SR501** | Detecta calor en movimiento (un conejo es un cuerpo caliente) con alcance de 3–7 m y 110°; bajo consumo (< 65 µA) y salida de 3,3 V compatible directa con los GPIO. |
 | **Ultrasónico HC-SR04** | Rango 2–400 cm con ±3 mm de precisión. Confirma que el objetivo está a < 150 cm (alcance de la boquilla), lo que elimina las falsas activaciones del PIR solo. |
 | **LED + 220 Ω** | Representa al rociador durante la demo. (3,3 V − 2 V) / 220 Ω ≈ 6 mA, dentro del límite seguro de un GPIO. |
 | **Divisor de voltaje** | El ECHO entrega 5 V y los GPIO aceptan máximo 3,3 V; el divisor protege la Raspberry. |
-| **Batería 20.000 mAh** | Autonomía en terreno sin red eléctrica. `[COMPLETAR: autonomía medida en horas]` |
+| **Batería 20.000 mAh** | Autonomía en terreno sin red eléctrica. La Raspberry Pi 4 Model B necesita 5 V / 3 A por USB-C, por lo que la batería debe entregar al menos 3 A. `[COMPLETAR: autonomía medida en horas]` |
 | **Mini bomba + relé** | La bomba no puede alimentarse desde un GPIO; el relé la aísla y la activa con la señal del pin 12. |
 
 ---
@@ -52,7 +52,7 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 - ⚠️ Mantener la electrónica aislada del agua del rociador.
 
 ## Especificaciones técnicas
-**Alimentación:** 5 V USB (batería 20.000 mAh)
+**Alimentación:** 5 V / 3 A por USB-C (batería 20.000 mAh)
 **Consumo:** `[COMPLETAR: medir con tester USB, mA]`
 **Dimensiones:** Base 132 × 132 × 203 mm · Torreta 59 × 81 × 88 mm
 **Peso:** `[COMPLETAR] g`
@@ -63,5 +63,6 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 |---|---|---|
 | Distancia siempre −1 | ECHO sin conexión o divisor mal armado | Revisar pin 18 y resistencias |
 | Muchas activaciones falsas | PIR muy sensible | Bajar sensibilidad con el potenciómetro del HC-SR501 |
+| Raspberry se reinicia o muestra ícono de rayo | Batería entrega menos de 3 A | Usar salida de 3 A o cable USB-C de buena calidad |
 | Dashboard no abre | Celular en otra red / IP cambió | Misma WiFi; verificar IP con `hostname -I` |
 | LED no enciende | LED invertido o resistencia suelta | Revisar polaridad (pata larga al pin 12) |
