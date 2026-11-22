@@ -1,36 +1,46 @@
 # Archivos Fusion 360 — AgroSafe
 
-## Archivos disponibles
-
 | Archivo | Contenido |
 |---|---|
-| `Montaje completo .step` | Ensamble completo del prototipo (encapsulado + componentes) |
+| `modelo. completof3d.f3d` | Archivo nativo de Fusion 360 con el ensamble completo |
+| `Montaje con componentes` | Ensamble STEP con carcasa y todos los componentes internos |
+| `Montaje completo .step` | Ensamble STEP del encapsulado |
 | `Pieza 1.stl` … `Pieza 6.stl` | Piezas individuales para impresión 3D |
-| `AgroSafe_ensamble_v3.f3z` | **Por subir** — archivo nativo de Fusion 360 (la pauta lo exige: sin `.f3d`/`.f3z` no se puede verificar el modelo) |
 
-> Para exportar: Fusion 360 → File → Export → *Fusion 360 Archive (.f3z)*, incluyendo componentes referenciados.
+## Piezas STL
+
+| Archivo | Pieza | Dimensiones (mm) |
+|---|---|---|
+| `Pieza 1.stl` | Base | 145,1 × 145,1 × 142,9 |
+| `Pieza 2.stl` | Bandeja | 132,8 × 132,8 × 45,6 |
+| `Pieza 3.stl` | Placa soporte protoboard | 60 × 87 × 6 |
+| `Pieza 4.stl` | Tapa | 139,9 × 139,9 × 6,8 |
+| `Pieza 5.stl` | Torreta | 59,3 × 102,7 × 109 |
+| `Pieza 6.stl` | Tapa de torreta | 51 × 43,5 × 5 |
 
 ## Árbol de componentes del ensamble
 
 ```text
-Agrosafe_Ensamble_Completo
-├── Base_Fija (132 × 132 × 203 mm)
-├── Tapa_Removible_Mantenimiento
-├── Torreta_Giratoria (59 × 81 × 88 mm)
-├── Raspberry_Pi_4B (85 × 56 × 17 mm)
-├── Protoboard
-├── Bateria_20000mAh
-├── Sensor_PIR_HC-SR501
-├── Sensor_Ultrasonico_HC-SR04
-├── ESP32-CAM
-├── Bomba_y_Rele
-├── Servomotor
-└── Tornilleria_M3
+AgroSafe_Ensamble_Completo
+├── Base
+├── Tapa
+├── Bandeja
+├── Placa_protoboard
+├── Torreta_cuerpo
+├── Torreta_tapa
+├── Raspberry_Pi_4B
+├── Rele_1canal
+├── Protoboard_400
+├── Powerbank
+├── Pila_9V
+├── ESP32_CAM
+├── PIR_HC_SR501
+├── HC_SR04
+└── Manguera
 ```
 
-`[COMPLETAR: qué pieza corresponde a cada archivo Pieza 1–6]`
-
 ## Parámetros principales
-- Grosor de pared: `[COMPLETAR] mm`
-- Holgura de encaje de la tapa: `[COMPLETAR] mm`
-- Material: PLA (prototipo) / PETG (exterior)
+- Grosor de pared: 2,8 mm (base) y 2,5 mm (torreta)
+- Holgura tapa–base: 2,1 mm por lado (pestaña 130 × 130 en interior de 134,3)
+- Holgura tapa de torreta: 0,3 mm por lado (pestaña 45,4 × 37,9 en abertura 46 × 38,5)
+- Material: PETG (prototipo en PLA)
