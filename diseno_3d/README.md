@@ -18,17 +18,17 @@ Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 
 ## Gemelo 3D — componentes que deben estar en el ensamble
 
-| Componente | Volumen de referencia (mm) | ¿Modelado? |
+| Componente | Volumen de referencia (mm) 
 |---|---|---|
-| Raspberry Pi 4 Model B | 85 × 56 × 17 | [ ] |
-| Protoboard | `[COMPLETAR]` | [ ] |
-| Batería 20.000 mAh | `[COMPLETAR]` | [ ] |
-| Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) | [ ] |
-| Sensor HC-SR04 | 45 × 20 × 15 | [ ] |
-| ESP32-CAM | 27 × 40 × 12 (con cámara) | [ ] |
-| Mini bomba + relé | `[COMPLETAR]` | [ ] |
-| Servomotor | `[COMPLETAR]` | [ ] |
-| Tornillería | M3 | [ ] |
+| Raspberry Pi 4 Model B | 85 × 56 × 17 
+| Protoboard | 82 x 54 x 9 
+| Batería 20.000 mAh | 50 x 25 x 15 
+| Sensor PIR HC-SR501 | 32 × 24 × 25 (con domo) 
+| Sensor HC-SR04 | 45 × 20 × 15 
+| ESP32-CAM | 27 × 40 × 12 (con cámara) 
+| Mini bomba | 44 x 23 x 23 
+| Tornillería | M3 
+| Relé | 35 x 26 x 19|
 
 ## Checklist
 - [ ] `fusion360/AgroSafe_ensamble_v3.f3z` con carcasa + componentes internos
