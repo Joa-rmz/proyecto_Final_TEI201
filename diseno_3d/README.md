@@ -11,7 +11,7 @@ Encapsulado de **dos piezas** con gemelo 3D de todos los componentes internos.
 **Material:** PLA (prototipo) · PETG (uso exterior: resiste sol y humedad)
 **Detalles:** aberturas de ventilación y pasacables.
 
-## 📁 Carpetas
+## Carpetas
 - `fusion360/` — `Montaje completo .step` (ensamble) + `Pieza 1.stl` a `Pieza 6.stl` · **falta `.f3d`/`.f3z`**
 - `planos/` — planos técnicos en PDF
 - `renders/` — renders exterior y explosionado
