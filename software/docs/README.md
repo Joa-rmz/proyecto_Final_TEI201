@@ -1,57 +1,40 @@
 # Documentación de Software
 
-## Contenido
+## Diagrama de flujo
 
-### Diagramas de Flujo
-Incluir diagramas de las funciones principales del sistema.
-
-**Formato:** PNG, PDF o draw.io
-
-### Documentación de Funciones
-
-#### Funciones Principales
-
-**función1()**
-- **Propósito:** [Descripción]
-- **Parámetros:** [Tipo y descripción]
-- **Retorna:** [Tipo y descripción]
-- **Ejemplo de uso:**
-```cpp
-// Código de ejemplo
+```mermaid
+flowchart TD
+    A[Inicio: GPIO + CSV] --> B{¿PIR detecta movimiento?}
+    B -- No --> R[Cada 5 s: registrar 'reposo'] --> B
+    B -- Sí --> C[Medir distancia HC-SR04]
+    C --> D{¿0 < distancia < 150 cm?}
+    D -- Sí --> E[Rociador ON 5 s + foto]
+    E --> F[Registrar 'activado' en CSV]
+    F --> G[Enfriamiento 8 s] --> B
+    D -- No --> H[Registrar 'descartado'] --> B
 ```
 
----
+## Funciones principales
 
-## Manual de Instalación
+**`medir_distancia_cm()`** — Envía un pulso de 10 µs por TRIG y mide el tiempo del eco. Retorna `float` (cm) o `-1` si no hay eco en 50 ms.
 
-[Paso a paso detallado para instalar y configurar el software]
+**`registrar(estado, distancia, foto=False)`** — Crea el evento con fecha y hora, lo agrega a la lista en memoria y lo escribe en `data/eventos.csv`.
 
----
+**`calcular_estadisticas()`** — Retorna un diccionario con: `activaciones_hoy`, `descartes_hoy`, `tasa_confirmacion`, `distancia_promedio`, `segundos_rocio_hoy`, `activaciones_ultima_hora`, `alerta`, `hora_peak`, `por_hora` (lista de 24 valores) e `historico_total`.
 
-## Manual de Operación
+## Manual de operación
 
-### Encendido del Sistema
-1. [Paso 1]
-2. [Paso 2]
+### Encendido
+1. Conectar la batería de 20.000 mAh a la Raspberry Pi.
+2. Esperar ~1 min a que inicie el sistema operativo.
+3. Ejecutar `python3 agrosafe.py` (o dejarlo como servicio al inicio).
+4. Abrir el dashboard en `http://<IP>:5000`.
 
-### Operación Normal
-1. [Paso 1]
-2. [Paso 2]
+### Lectura del dashboard
+- **Estado actual:** verde = reposo, naranjo = descartado, rojo = activado.
+- **Alerta roja:** ≥ 5 activaciones en la última hora → revisar el predio y el estanque.
+- **Hora de mayor actividad:** permite reforzar la protección en ese horario.
+- **Descargar datos (CSV):** para analizar varias noches en Excel o R.
 
-### Apagado del Sistema
-1. [Paso 1]
-2. [Paso 2]
-
----
-
-## Troubleshooting
-
-### Problemas Comunes
-
-**Problema 1: No conecta a WiFi**
-- Causa probable: [Explicación]
-- Solución: [Pasos]
-
-**Problema 2: Sensor no responde**
-- Causa probable: [Explicación]
-- Solución: [Pasos]
+### Apagado
+`Ctrl + C` en la terminal (apaga el LED y libera los pines), luego `sudo shutdown now`.
