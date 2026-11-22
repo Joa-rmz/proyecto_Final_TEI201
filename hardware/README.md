@@ -18,7 +18,7 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 | **PIR HC-SR501** | Detecta calor en movimiento (un conejo es un cuerpo caliente) con alcance de 3–7 m y 110°; bajo consumo (< 65 µA) y salida de 3,3 V compatible directa con los GPIO. |
 | **Ultrasónico HC-SR04** | Rango 2–400 cm con ±3 mm de precisión. Confirma con 3 lecturas que el objetivo está entre 15 y 50 cm (alcance útil del rocío), lo que elimina las falsas activaciones del PIR solo. |
 | **Divisor de voltaje** | El ECHO entrega 5 V y los GPIO aceptan máximo 3,3 V; el divisor protege la Raspberry. |
-| **Batería 20.000 mAh** | Autonomía en terreno sin red eléctrica. La Raspberry Pi 4 Model B necesita 5 V / 3 A por USB-C, por lo que la batería debe entregar al menos 3 A. `[COMPLETAR: autonomía medida en horas]` |
+| **Batería 20.000 mAh** | Autonomía en terreno sin red eléctrica. La Raspberry Pi 4 Model B necesita 5 V / 3 A por USB-C, por lo que la batería debe entregar al menos 3 A. Autonomía estimada: 12 a 18 h (ver Especificaciones técnicas). |
 | **Mini bomba + relé + pila 9 V** | La bomba no puede alimentarse desde un GPIO; el relé la aísla y la activa con la señal del GPIO 27 (pin 13), y la pila 9 V la alimenta por separado. |
 
 ---
