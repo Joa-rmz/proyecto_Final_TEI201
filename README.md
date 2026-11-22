@@ -150,29 +150,29 @@ Desde un dispositivo en la misma red WiFi: **`http://<IP-de-la-Raspberry>:5000`*
 - [x] Almacenamiento persistente (CSV estructurado)
 - [x] Dashboard con indicadores, gráfico y alerta
 - [x] Librerías documentadas (`software/librerias/`, `FUENTES.md`)
-- [ ] Captura de pantalla del dashboard y del CSV con datos reales (`testing/evidencias/`)
+- [x] Captura del dashboard y CSV de datos (`testing/evidencias/`, `testing/datos/`)
 
 ### Hardware
-- [ ] Esquemático (Fritzing / KiCad / EasyEDA) en `hardware/esquemas/`
-- [ ] BOM con costos completos (`hardware/bom/BOM.csv`)
-- [ ] Fotografías del prototipo ensamblado (mínimo 3 ángulos)
+- [x] Esquemático eléctrico (`hardware/esquemas/`)
+- [x] BOM con costos (`hardware/bom/BOM.csv`; componentes en préstamo, costo $0)
+- [x] Fotografías del prototipo ensamblado, 3 ángulos (`hardware/fotos/`)
 - [x] Justificación de componentes (`hardware/README.md`)
 
 ### Diseño 3D
-- [ ] Archivo `.f3d` / `.f3z` con ensamble completo (carcasa + componentes)
+- [x] Archivo `.f3d` con ensamble completo (`diseno_3d/fusion360/`)
 - [x] Archivo STEP y piezas STL
-- [ ] Renders (exterior + explosionado)
-- [ ] Planos técnicos en PDF con cotas y tolerancias
+- [x] Renders exterior, desarmado e interior (`diseno_3d/renders/`)
+- [x] Planos técnicos en PDF con cotas y tolerancias (`diseno_3d/planos/`)
 
 ### Testing
 - [x] Protocolo de pruebas (`testing/reportes/protocolo_pruebas.md`)
-- [ ] Resultados cuantitativos completados
-- [ ] Análisis de falla y solución
-- [ ] Validación contra el problema del Avance 1
+- [x] Resultados cuantitativos (`testing/README.md`)
+- [x] Análisis de fallas y propuestas de mejora
+- [x] Validación contra el problema del Avance 1
 
 ### GitHub / Documentación
 - [x] README completo y FUENTES.md en la raíz
-- [ ] Presentación Avance 3 en `documentacion/presentacion/`
+- [x] Presentación Avance 3 (`documentacion/presentacion/`)
 - [ ] URL del repositorio en los slides
 
 ---
