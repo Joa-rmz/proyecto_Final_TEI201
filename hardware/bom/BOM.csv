@@ -1,17 +1,17 @@
-Cantidad,Componente,Especificacion,Fabricante/Modelo,Proveedor,Precio unitario (CLP),Precio total (CLP),Datasheet
-1,Raspberry Pi 4 Model B,"BCM2711 4 núcleos 1,5 GHz, [COMPLETAR] GB RAM, WiFi 2,4/5 GHz, BT 5.0, 40 GPIO 3,3 V, alimentación USB-C 5 V/3 A",Raspberry Pi Foundation,[COMPLETAR],[COMPLETAR],[COMPLETAR],https://www.raspberrypi.com/products/raspberry-pi-4-model-b/
-1,Sensor PIR HC-SR501,"Alcance 3-7 m, ángulo 110°, 4,5-20 V, salida 3,3 V",HC-SR501,[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR]
-1,Sensor ultrasónico HC-SR04,"Rango 2-400 cm, precisión ±3 mm, 5 V, 15 mA",HC-SR04,[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR]
-1,ESP32-CAM,"AI-Thinker, cámara OV2640 2 MP, WiFi 2,4 GHz, 5 V",AI-Thinker,[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR]
-1,Programador USB-serie (FTDI o ESP32-CAM-MB),Carga del firmware de la ESP32-CAM,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,LED 5 mm,Indicador del rociador,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Resistencia 220 Ω,1/4 W - limitación de corriente del LED,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-2,Resistencias divisor de voltaje,[COMPLETAR valores] - ECHO 5 V a 3,3 V,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Protoboard,[COMPLETAR puntos],Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Cables jumper (set),Macho-macho / macho-hembra,Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Batería externa,"20.000 mAh, salida 5 V / 3 A (USB-C)",[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Mini bomba de agua,[COMPLETAR voltaje/caudal],[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Módulo relé,"1 canal, 5 V, entrada compatible 3,3 V",[COMPLETAR],[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Encapsulado impreso 3D,Base fija + torreta - PLA (prototipo) / PETG (exterior),Impresión propia,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-1,Tornillería,[COMPLETAR: M3 x ...],Genérico,[COMPLETAR],[COMPLETAR],[COMPLETAR],—
-,,,,,TOTAL,[COMPLETAR],
+Cantidad,Componente,Especificacion,Fabricante/Modelo,Origen,Costo real (CLP),Datasheet
+1,Raspberry Pi 4 Model B,"BCM2711 4 núcleos 1,5 GHz, 2 GB RAM, WiFi 2,4/5 GHz, BT 5.0, 40 GPIO 3,3 V, alimentación USB-C 5 V/3 A",Raspberry Pi Foundation,Préstamo,0,https://www.raspberrypi.com/products/raspberry-pi-4-model-b/
+1,Sensor PIR HC-SR501,"Alcance 3-7 m, ángulo 110°, 4,5-20 V, salida 3,3 V",HC-SR501,Préstamo,0,—
+1,Sensor ultrasónico HC-SR04,"Rango 2-400 cm, precisión ±3 mm, 5 V, 15 mA",HC-SR04,Préstamo,0,—
+1,ESP32-CAM,"AI-Thinker, cámara OV2640 2 MP, WiFi 2,4 GHz, 5 V",AI-Thinker,Préstamo,0,—
+1,Programador USB-serie (FTDI o ESP32-CAM-MB),Carga del firmware de la ESP32-CAM,Genérico,Préstamo,0,—
+2,Resistencias divisor de voltaje,"[COMPLETAR valores] - ECHO 5 V a 3,3 V",Genérico,Préstamo,0,—
+1,Protoboard,400 puntos,Genérico,Préstamo,0,—
+1,Cables jumper (set),Macho-macho / macho-hembra,Genérico,Préstamo,0,—
+1,Batería externa,"20.000 mAh, salida 5 V / 3 A (USB-C)",—,Préstamo,0,—
+1,Módulo relé,"1 canal, 5 V, entrada compatible 3,3 V",Genérico,Préstamo,0,—
+1,Mini bomba de agua,Alimentada por la pila de 9 V a través del relé,Genérico,Préstamo,0,—
+1,Pila 9 V,Alimentación independiente de la bomba,—,Préstamo,0,—
+1,Manguera,Desde la base hasta la boquilla de la torreta,—,Préstamo,0,—
+1,Encapsulado impreso 3D,"6 piezas: base, tapa, bandeja, placa soporte, torreta y tapa de torreta - PLA (prototipo) / PETG (exterior)",Impresión 3D,Préstamo,0,—
+4,Tornillos M3,Fijación de la tapa a la base,Genérico,Préstamo,0,—
+,,,,,TOTAL,0
