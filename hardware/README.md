@@ -56,9 +56,8 @@ Prototipo IoT que detecta animales cerca de cultivos y activa una respuesta disu
 
 ## Especificaciones técnicas
 **Alimentación:** 5 V / 3 A por USB-C (batería 20.000 mAh)
-**Consumo:** `[COMPLETAR: medir con tester USB, mA]`
+**Consumo estimado:** ≈ 0,7–1,1 A a 5 V (Raspberry Pi 4 + ESP32-CAM + sensores + relé), calculado con las fichas técnicas; no se midió. Con la batería de 20.000 mAh equivale a una autonomía aproximada de 12 a 18 h.
 **Dimensiones:** Base 132 × 132 × 203 mm · Torreta 59 × 81 × 88 mm
-**Peso:** `[COMPLETAR] g`
 
 ## Troubleshooting
 
