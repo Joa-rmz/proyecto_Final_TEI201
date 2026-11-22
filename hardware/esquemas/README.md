@@ -18,4 +18,4 @@
 | ECHO HC-SR04 | R1 → nodo → pin 18 (GPIO 24); nodo → R2 → GND |
 
 ## Notas de diseño
-- Divisor de voltaje: Vout = 5 V × R2 / (R1 + R2) ≈ 3,3 V. `[COMPLETAR valores de R1 y R2]`
+- Divisor de voltaje: Vout = 5 V × R2 / (R1 + R2) ≈ 3,3 V, para que el ECHO del HC-SR04 no dañe el GPIO24.
