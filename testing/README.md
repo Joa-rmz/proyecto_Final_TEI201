@@ -3,7 +3,7 @@
 ## Objetivo
 Validar que AgroSafe detecta correctamente, actúa solo cuando corresponde, registra los datos de forma persistente y entrega información útil para el problema del Avance 1.
 
-## 📁 Carpetas
+## Carpetas
 - `reportes/` — [`protocolo_pruebas.md`](reportes/protocolo_pruebas.md): objetivo, condiciones, procedimiento, criterio de éxito y tablas de resultados de cada prueba
 - `datos/` — copias de `eventos.csv` de cada sesión de prueba
 - `evidencias/` — capturas del dashboard, fotos y videos
