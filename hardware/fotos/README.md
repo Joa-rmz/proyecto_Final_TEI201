@@ -8,9 +8,11 @@
 | `IMG_5746.jpeg` | Vista posterior: torreta y base cerradas |
 | `IMG_5747.jpeg` | Vista superior sin la tapa de la torreta: el HC-SR04 y el PIR montados por dentro |
 
-![Vista frontal](IMG_5745.jpeg)
-![Vista posterior](IMG_5746.jpeg)
-![Vista superior de la torreta](IMG_5747.jpeg)
+<p>
+  <img src="IMG_5745.jpeg" width="260" alt="Vista frontal">
+  <img src="IMG_5746.jpeg" width="260" alt="Vista posterior">
+  <img src="IMG_5747.jpeg" width="260" alt="Vista superior de la torreta">
+</p>
 
 ## Proceso de cableado
 
@@ -22,6 +24,8 @@ Pruebas del circuito en protoboard antes de montarlo en la carcasa. En esta etap
 | `IMG_0759.jpeg` | Circuito completo de prueba: PIR, HC-SR04 con divisor de voltaje (resistencias) y LED |
 | `IMG_0758.jpeg` | Mismo circuito desde otro ángulo; atrás la mini bomba y el resto de los componentes |
 
-![Primera prueba](IMG_0760.jpeg)
-![Circuito de prueba](IMG_0759.jpeg)
-![Circuito de prueba, otro ángulo](IMG_0758.jpeg)
+<p>
+  <img src="IMG_0760.jpeg" width="260" alt="Primera prueba">
+  <img src="IMG_0759.jpeg" width="260" alt="Circuito de prueba">
+  <img src="IMG_0758.jpeg" width="260" alt="Circuito de prueba, otro ángulo">
+</p>
