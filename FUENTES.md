@@ -42,11 +42,6 @@ Proyecto: **AgroSafe** · TEI201 Taller de Diseño en Ingeniería · Grupo 6 · 
 - Adaptación: el equipo definió los pines según el montaje real (PIR GPIO 17, TRIG 23, ECHO 24, relé 27), el rango de 15–50 cm, el pulso de 2 s, la pausa de 5 s y la figura objetivo usada en la demostración.
 - Comprensión: `controlar()` espera movimiento del PIR; `evaluar()` exige 3 lecturas entre 15 y 50 cm, 2 capturas en que `detectar_estrella()` reconoce la figura y una verificación final de distancia. Solo si todo se cumple, el relé enciende la bomba 2 s (con `try/finally` para asegurar que siempre se apague). Luego hay una pausa de 5 s y `esperar_rearme()` espera a que termine el movimiento para no activar dos veces por el mismo animal. El servidor Flask corre en otro hilo para que el dashboard responda durante el control.
 
-### Repositorio de datos e indicadores — Avance 3 (`software/src/agrosafe.py`)
-- Herramienta: Claude (Anthropic), noviembre 2026.
-- Prompts utilizados: "necesito que realices el GitHub con las siguientes infos" (se entregó la pauta del Avance 3) y "puedes cambiarlo tú?" (se entregó el programa del equipo para agregarle el guardado de datos).
-- Funciones agregadas sin cambiar la lógica del equipo: `iniciar_csv()`, escritura en CSV dentro de `registrar()` (con el tipo de evento: detección, activación, descarte, error), `calcular_estadisticas()`, la ruta `/datos.csv`, los indicadores en `/api/estado` y la sección de indicadores, gráfico por hora y alerta del dashboard.
-- Comprensión: `registrar()` abre `eventos.csv` en modo *append* y escribe una fila por evento, así el dato no se pierde si se corta la energía. `iniciar_csv()` crea el archivo con encabezado o, si ya existe, recarga el histórico. `calcular_estadisticas()` filtra los eventos del día, cuenta detecciones, activaciones y descartes, calcula el % de confirmación (activaciones / detecciones), agrupa por hora con `Counter` para obtener la hora de mayor actividad y activa la alerta si hay 5 o más activaciones en los últimos 60 minutos. Se probó con sensores simulados: con 7 detecciones, 6 activaciones y 1 descarte, la API devolvió 85,7 % de confirmación, la alerta activa y el histórico se recargó correctamente al reiniciar.
 
 ### Modelo 3D del encapsulado (`diseno_3d/fusion360/`)
 - Herramienta: Claude (Anthropic), noviembre 2026, junto con Autodesk Fusion 360.
@@ -62,7 +57,7 @@ Proyecto: **AgroSafe** · TEI201 Taller de Diseño en Ingeniería · Grupo 6 · 
 
 ### Documentación del repositorio
 - Herramienta: Claude (Anthropic), noviembre 2026.
-- Uso: redacción de los README de cada carpeta, el BOM, el protocolo de pruebas y las instrucciones de la ESP32-CAM, a partir de la pauta del Avance 3, la presentación del Avance 2 y la información entregada por el equipo.
+- Uso: ayuda en la redacción de los README.
 - Adaptación: los datos técnicos (componentes, conexiones, dimensiones, problema y contexto) provienen del trabajo del equipo.
 
 ### Esquemático y simulación de pruebas (`hardware/esquemas/` y `testing/`)
