@@ -2,7 +2,7 @@
 
 Archivo: [`BOM.csv`](BOM.csv) (abre directo en Excel / Google Sheets).
 
-> ⚠️ Completar proveedor y precios (CLP) de cada ítem y el **costo total**. La pauta penaliza un BOM sin costos.
+> Completar proveedor y precios (CLP) de cada ítem y el **costo total**. La pauta penaliza un BOM sin costos.
 
 | Cant. | Componente | Especificación | Precio unit. (CLP) | Total (CLP) |
 |---|---|---|---|---|
