@@ -1,11 +1,11 @@
 # Documentación del Proyecto
 
-> 📘 En este curso **no se pide un informe escrito**: el repositorio completo funciona como informe. El índice está en el [README principal](../README.md).
+> En este curso **no se pide un informe escrito**: el repositorio completo funciona como informe. El índice está en el [README principal](../README.md).
 
 | Archivo | Estado |
 |---|---|
-| Avance 2 | ✅ en [TEI_201_Grupo6](https://github.com/joaquinrami703-cell/TEI_201_Grupo6/tree/main/documentacion/presentacion) |
-| `presentacion/Agrosafe_Avance_3.pdf` | ⚠️ Subir antes de presentar (incluir URL del repo) |
+| Avance 2 | Disponible en [TEI_201_Grupo6](https://github.com/joaquinrami703-cell/TEI_201_Grupo6/tree/main/documentacion/presentacion) |
+| `presentacion/Agrosafe_Avance_3.pdf` | Subir antes de presentar (incluir URL del repo) |
 
 ## Estructura sugerida de slides (8–10 min)
 1. El problema (1 min) — conejos en el Choapa, ODS 15
