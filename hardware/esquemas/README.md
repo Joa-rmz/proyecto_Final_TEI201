@@ -1,6 +1,6 @@
 # Esquemas de Circuito
 
-> ⚠️ Subir aquí el esquemático completo (`.fzz` de Fritzing o equivalente) y su exportación `esquematico.pdf` / `.png`.
+> Subir aquí el esquemático completo (`.fzz` de Fritzing o equivalente) y su exportación `esquematico.pdf` / `.png`.
 
 ## Archivos esperados
 - `agrosafe_circuito.fzz` — fuente Fritzing
