@@ -354,7 +354,7 @@ def dashboard():
 
     if est["alerta"]:
         alerta_html = (
-            "<div class='alerta'>⚠️ ALTA ACTIVIDAD: "
+            "<div class='alerta'>ALTA ACTIVIDAD: "
             f"{est['activaciones_ultima_hora']} activaciones en la última hora. "
             "Revisar el predio y el nivel del estanque de agua.</div>"
         )
@@ -390,7 +390,7 @@ td {{ padding: 6px; border-bottom: 1px solid #ddd; }}
 </style>
 </head>
 <body>
-<h1>🐇 AGROSAFE</h1>
+<h1>AGROSAFE</h1>
 {alerta_html}
 <h2>Estado actual</h2>
 <p style="font-size:1.3em">{estado_html}</p>
