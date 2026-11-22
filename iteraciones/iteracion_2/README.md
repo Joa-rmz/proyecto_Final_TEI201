@@ -14,7 +14,6 @@
 
 ## Feedback recibido
 - Integrar un ensamble 3D completo con joints y componentes internos.
-- `[COMPLETAR otros comentarios del docente]`
 
 ## Próximos pasos planteados
 1. Ensamblar el prototipo en la carcasa impresa.
